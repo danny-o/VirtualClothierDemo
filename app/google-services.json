@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "89183639623",
+    "firebase_url": "https://virtualshop-96b72.firebaseio.com",
+    "project_id": "virtualshop-96b72",
+    "storage_bucket": "virtualshop-96b72.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:89183639623:android:c414eea259ef827ebcf962",
+        "android_client_info": {
+          "package_name": "com.digitalskies.virtualclothierdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "89183639623-ujlduq37c92hunmkl5j0ja24fvsum9ci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digitalskies.virtualclothierdemo",
+            "certificate_hash": "4d88919327da1b42a084a60bfdb455f539cdc2de"
+          }
+        },
+        {
+          "client_id": "89183639623-3p6b8eaidhhrm3tuqu71jj8tbjnoun9e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIL3v_yMdFhpfwE9BvypIAjqvnEJYtLrc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "89183639623-3p6b8eaidhhrm3tuqu71jj8tbjnoun9e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

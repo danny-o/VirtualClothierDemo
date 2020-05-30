@@ -1,0 +1,61 @@
+<resources>
+    <string name="shr_app_name">VirtualClothier</string>
+    <string name="shr_hint_email">Email</string>
+    <string name="shr_hint_password">Password</string>
+    <string name="shr_button_next">Sign In</string>
+    <string name="shr_button_cancel">Cancel</string>
+    <string name="shr_error_password">Password must contain at least 8 characters.</string>
+    <string name="shr_filter_title">Filter</string>
+    <string name="shr_search_title">Search</string>
+    <string name="shr_product_title">Title</string>
+    <string name="price">$</string>
+    <string name="product_added">Product Added</string>
+    <string name="product_upload_failed">Product upload failed</string>
+
+    <!-- Shrine backdrop menu labels -->
+    <string name="shr_featured_label">Featured</string>
+    <string name="shr_apartment_label">Apartment</string>
+    <string name="shr_accessories_label">Accessories</string>
+    <string name="shr_shoes_label">Shoes</string>
+    <string name="shr_tops_label">Tops</string>
+    <string name="shr_bottoms_label">Bottoms</string>
+    <string name="shr_dresses_label">Dresses</string>
+    <string name="shr_account_label">My Account</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="title_activity_initial_login">VirtualClothier</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_product_entry">ProductEntryActivity</string>
+    <string name="product_price">product price</string>
+    <string name="product_name">product name</string>
+    <string name="register">Register</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="email_hint">Email</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password">password</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_with_google_icon">Sign in with google icon</string>
+    <string name="web_client_id">89183639623-3p6b8eaidhhrm3tuqu71jj8tbjnoun9e.apps.googleusercontent.com</string>
+    <string name="product_detail">Product Details</string>
+    <string name="price_prefix">$</string>
+    <string name="product_description">Product Description</string>
+    <string name="checkout">Checkout</string>
+    <string name="projects_search_hint">Search products...</string>
+    <string name="favorites">Favorites</string>
+    <string name="sign_out">Sign Out</string>
+
+</resources>
