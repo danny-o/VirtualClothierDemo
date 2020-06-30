@@ -1,16 +1,16 @@
-package com.digitalskies.virtualclothierdemo;
+package com.digitalskies.virtualclothierdemo.mainactivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
-import com.digitalskies.virtualclothierdemo.interfaces.NavigationHost;
-import com.digitalskies.virtualclothierdemo.interfaces.SetUpOptionsMenu;
-import com.digitalskies.virtualclothierdemo.mainactivity.MainActivity;
+import com.digitalskies.virtualclothierdemo.mainactivity.fragments.RegisterFragment;
 import com.digitalskies.virtualclothierdemo.mainactivity.fragments.LoginFragment;
 import com.digitalskies.virtualclothierdemo.mainactivity.fragments.ProductFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -36,35 +36,38 @@ public class SignInUtil{
     private static FirebaseAuth.AuthStateListener mAuthStateListener;
     private static FirebaseAuth firebaseAuth;
     private ProductFragment productFragment;
-    private static  FirebaseFirestore firebaseFirestore;
+    private LoginFragment loginFragment;
+    private RegisterFragment registerFragment;
+    private FirebaseFirestore firebaseFirestore;
     private static Boolean isAdmin=false;
     private static final  String TAG="Sign in";
     private Activity activity;
-    private LoginFragment loginFragment;
-    private GoogleSignInClient signInClient;
-    private SignInUtil signInUtil;
+    private static SignInUtil signInUtil;
+    private Boolean isANewUser=false;
+    private final SharedPreferences sharedPreferences;
 
-    public SignInUtil(){
+    private SignInUtil(Activity activity){
+
+        this.activity=activity;
+        this.loginFragment=new LoginFragment();
+        this.productFragment=new ProductFragment();
+        sharedPreferences = activity.getSharedPreferences("My_PREFERENCES",Activity.MODE_PRIVATE);
+        setUpFireBaseFireStore();
         setUpFireBaseAuth();
         setUpAuthListener();
-
-
     }
-    public  SignInUtil(Activity activity){
-        productFragment=null;
-        this.activity=activity;
-        setUpFireBaseAuth();
-        setUpFireBaseFireStore();
-
+    public static void initiateSignInUtil(Activity activity){
+       signInUtil=new SignInUtil(activity);
+    }
+    public static SignInUtil getSignInUtil(){
+        return  signInUtil;
     }
 
-    public SignInUtil(Activity activity,LoginFragment loginFragment,ProductFragment productFragment){
-
-        this.activity=activity;
-        this.loginFragment=loginFragment;
-        this.productFragment=productFragment;
-
-        setUpFireBaseFireStore();
+    public Fragment getLoginFragment(){
+        return loginFragment;
+    }
+    public Fragment getProductFragment(){
+        return productFragment;
     }
 
     private void setUpFireBaseAuth() {
@@ -81,47 +84,42 @@ public class SignInUtil{
         mAuthStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser()!=null){
-                    if(productFragment!=null){
-                        checkIfAdmin();
-                    }
-
+                if(firebaseAuth.getCurrentUser()==null){
+                    ((NavigationHost)activity).navigateTo(loginFragment,false);
 
                 }
 
+                   }
 
+            };
+        }
 
-            }
-
-        };
-    }
     public boolean isSignedIn(){
         if(firebaseAuth==null){
             firebaseAuth=FirebaseAuth.getInstance();
         }
         return firebaseAuth.getCurrentUser() != null;
     }
-    public void signOut(Activity activity){
-        if(firebaseAuth==null){
-            firebaseAuth=FirebaseAuth.getInstance();
-        }
+    public void signOut(){
+
         firebaseAuth.signOut();
-        ((MainActivity)activity).navigateTo(new LoginFragment(),false);
+
     }
 
-    public void createNewUser(final String email, String password){
-        ((RegisterActivity)activity).setUpProgressBar(ProgressBar.VISIBLE);
+    public void createNewUser(Fragment fragment,final String email, String password){
+        registerFragment=(RegisterFragment)fragment;
+       registerFragment.setUpProgressBar(ProgressBar.VISIBLE);
         firebaseAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
                             List<String> favProducts=new ArrayList<>();
-                            favProducts.add("");
+                            List<String >productsInCart = new ArrayList<>();
                             User user = new User();
                             user.setName(email.substring(0, email.indexOf("@")));
-
                             user.setFavoriteProducts(favProducts);
+                            user.setProductsInCart(productsInCart);
                             user.setAdmin(false);
                             firebaseFirestore.collection("users").document(firebaseAuth.getCurrentUser().getUid())
                                     .set(user)
@@ -129,26 +127,23 @@ public class SignInUtil{
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()) {
-                                                ((RegisterActivity) activity).setUpProgressBar(ProgressBar.INVISIBLE);
+                                                registerFragment.setUpProgressBar(ProgressBar.INVISIBLE);
                                                 Toast.makeText(activity, "registered successfully", Toast.LENGTH_SHORT).show();
-                                                activity.finish();
+                                                isANewUser = true;
                                                 firebaseAuth.signOut();
                                             }
                                             else{
                                                 Toast.makeText(activity,"something went wrong",Toast.LENGTH_SHORT).show();
-                                                ((RegisterActivity) activity).setUpProgressBar(ProgressBar.INVISIBLE);
-                                                Intent intent=new Intent(activity,MainActivity.class);
-                                                activity.startActivity(intent);
-                                                activity.finish();
+                                                registerFragment.setUpProgressBar(ProgressBar.INVISIBLE);
+
 
                                             }
                                         }
                                     });
                         }
                         else{
-                            ((RegisterActivity)activity).setUpProgressBar(ProgressBar.INVISIBLE);
+                          registerFragment.setUpProgressBar(ProgressBar.INVISIBLE);
                             Toast.makeText(activity,"registration failed",Toast.LENGTH_SHORT).show();
-                            activity.finish();
                         }
 
                     }
@@ -161,7 +156,8 @@ public class SignInUtil{
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            ((NavigationHost)activity).navigateTo(productFragment,false);
+                            isANewUser=false;
+                            checkIfAdmin();
 
                         }
                         else{
@@ -170,42 +166,53 @@ public class SignInUtil{
                     }
                 });
     }
-    public  void signInWithGoogle(){
+    public  void signInWithGoogle() {
+        GoogleSignInOptions gSignInOptions=new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(activity.getString(R.string.web_client_id))
+                .requestEmail()
+                .build();
+        GoogleSignInClient signInClient= GoogleSignIn.getClient(activity, gSignInOptions);
 
-        Intent signInIntent=getSignInClient().getSignInIntent();
+        Intent signInIntent=signInClient.getSignInIntent();
         loginFragment.startActivityForResult(signInIntent,RC_SIGN_IN);
     }
 
     public  void firebaseAuthWithGoogle(String idToken,final String name){
-        AuthCredential credential=GoogleAuthProvider.getCredential(idToken,null) ;
+        final AuthCredential credential=GoogleAuthProvider.getCredential(idToken,null) ;
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
+
                             if (task.getResult().getAdditionalUserInfo().isNewUser()){
                                 List<String >favProductList = new ArrayList<>();
-                                favProductList.add("");
+                                List<String >productsInCart = new ArrayList<>();
                                 User user = new User();
                                 user.setName(name);
                                 user.setAdmin(true);
                                 user.setFavoriteProducts(favProductList);
+                                user.setProductsInCart(productsInCart);
                                 firebaseFirestore.collection("users").document(firebaseAuth.getCurrentUser().getUid())
                                         .set(user)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (!task.isSuccessful()) {
-                                                    Toast.makeText(activity, "sign in with google in failed", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(activity, "sign in with google failed", Toast.LENGTH_SHORT).show();
                                                     firebaseAuth.signOut();
-                                                    loginFragment.setUpProgressBarVisibility(ProgressBar.INVISIBLE);
+                                                }
+                                                else{
+                                                    checkIfAdmin();
                                                 }
                                             }
                                         });
 
                             }
-
-                            ((NavigationHost) activity).navigateTo(productFragment, false);
+                            else{
+                                checkIfAdmin();
+                            }
 
                         }
                         else{
@@ -214,33 +221,51 @@ public class SignInUtil{
                     }
                 });
     }
-    public GoogleSignInClient  getSignInClient(){
-        GoogleSignInOptions gSignInOptions=new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(activity.getString(R.string.web_client_id))
-                .requestEmail()
-                .build();
-        return GoogleSignIn.getClient(activity, gSignInOptions);
-    }
     private void checkIfAdmin() {
         firebaseFirestore.collection("users").document(firebaseAuth.getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if(task.isSuccessful()) {
-                            //activity.Toast.makeText(activity, "success", Toast.LENGTH_SHORT).show();
-                            ((SetUpOptionsMenu)productFragment).setAdmin(isAdmin);
+
+                            User user=task.getResult().toObject(User.class);
+                            isAdmin=user.getAdmin();
+                            setProductsInCart(user);
+
+                            loginFragment.setUpProgressBarVisibility(ProgressBar.INVISIBLE);
+
+                            SharedPreferences.Editor editor=sharedPreferences.edit();
+                            editor.putBoolean("isAdmin",isAdmin);
+
+
+                            editor.apply();
+
+                            ((NavigationHost)activity).navigateTo(productFragment,false);
 
                         }
                         else {
                             Log.d(TAG, "Error getting users: ", task.getException());
                             Toast.makeText(activity, "error retrieving users", Toast.LENGTH_SHORT).show();
+                            firebaseAuth.signOut();
                         }
                     }
                 });
 
 
+    }
+
+    private void setProductsInCart(User user) {
+       SharedPreferences sharedPreferences=activity.getSharedPreferences("MY_PREFERENCES",Activity.MODE_PRIVATE);
+       SharedPreferences.Editor editor=sharedPreferences.edit();
+       editor.putInt("PRODUCTS_IN_CART",user.getProductsInCart().size());
+       editor.apply();
+
+    }
+
+    public boolean getIfAdmin(){
+       return sharedPreferences.getBoolean("isAdmin",false);
     }
     public void detachListener(){
         firebaseAuth.removeAuthStateListener(mAuthStateListener);

@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.staggeredgridlayout;
+package com.digitalskies.virtualclothierdemo.recycleradapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -53,13 +53,7 @@ implements Filterable {
     @NonNull
     @Override
     public StaggeredProductCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutId = R.layout.shr_staggered_product_card_first;
-        /*if (viewType == 1) {
-            layoutId = R.layout.shr_staggered_product_card_second;
-        } else if (viewType == 2) {
-            layoutId = R.layout.shr_staggered_product_card_third;
-        }*/
-
+        int layoutId = R.layout.product_card;
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         return new StaggeredProductCardViewHolder(layoutView,context);
     }

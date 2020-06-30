@@ -18,11 +18,11 @@ public class ProductEntryViewModel extends AndroidViewModel {
 
     public ProductEntryViewModel(@NonNull Application application) {
         super(application);
-        repository = Repository.getRepository();
+        repository = Repository.getRepository(application);
         }
 
-        public void createProduct(String productName, String productCategory, int price, Uri imageUri){
-        repository.createProduct(productName,productCategory,price,imageUri);
+        public void createProduct(String productName, String productCategory, int price,String productDescription, Uri imageUri){
+        repository.createProduct(productName,productCategory,price,productDescription,imageUri);
 
         }
         public LiveData<List<Product>> productListChanged(){

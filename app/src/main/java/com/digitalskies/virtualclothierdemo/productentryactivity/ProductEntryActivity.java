@@ -20,14 +20,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.digitalskies.virtualclothierdemo.Repository;
-import com.digitalskies.virtualclothierdemo.interfaces.ToastMessage;
 import com.google.codelabs.mdc.java.virtualclothierdemo.R;
 
 public class ProductEntryActivity extends AppCompatActivity implements ToastMessage {
 
     private static final int UPLOAD_REQUEST =2 ;
     private static final int REQUEST_PERMISSIONS =1 ;
-    private EditText productName,productCategory,productPrice;
+    private EditText productName,productCategory,productPrice,productDescription;
     private ImageView productImage;
     private Button saveButton;
     private Repository repository;
@@ -54,9 +53,10 @@ public class ProductEntryActivity extends AppCompatActivity implements ToastMess
         viewModel = new ViewModelProvider(this).get(ProductEntryViewModel.class);
         viewModel.getUploadStatus().observe(this,observer);
 
-        productName=findViewById(R.id.et_email);
-        productPrice=findViewById(R.id.product_pricing);
-        productCategory=findViewById(R.id.product_category);
+        productName=findViewById(R.id.et_product_name);
+        productPrice=findViewById(R.id.et_product_price);
+        productCategory=findViewById(R.id.et_product_category);
+        productDescription=findViewById(R.id.et_product_description);
         saveButton=findViewById(R.id.save_button);
         productImage=findViewById(R.id.product_image);
         uploadProgress=findViewById(R.id.uploadProgress);
@@ -85,18 +85,26 @@ public class ProductEntryActivity extends AppCompatActivity implements ToastMess
             imageUri = data.getData();
             productImage.setImageURI(imageUri);
         }
+
+    }
+
+   public void createProduct(View view){
+
+        if(imageUri!=null){
+            showProgressBar();
+            viewModel.createProduct(
+                    productName.getText().toString(),
+                    productCategory.getText().toString(),
+                    Integer.parseInt(productPrice.getText().toString()),
+                    productDescription.getText().toString(),
+                    imageUri);
+
+        }
         else{
-            productImage.setImageURI(null);
+            Toast.makeText(this,"please set the Image",Toast.LENGTH_SHORT).show();
         }
 
 
-    }
-   public void createProduct(View view){
-        showProgressBar();
-        viewModel.createProduct(productName.getText().toString(),
-                productCategory.getText().toString(),
-                Integer.parseInt(productPrice.getText().toString()),
-                imageUri);
     }
     public void showProgressBar(){
         uploadProgress.setVisibility(ProgressBar.VISIBLE);
@@ -108,7 +116,7 @@ public class ProductEntryActivity extends AppCompatActivity implements ToastMess
 
     @Override
     public void showToast(Integer uploadStatus) {
-        if(uploadStatus==1){
+        if(uploadStatus==-1){
             Toast.makeText(this,getString(R.string.product_added),Toast.LENGTH_LONG).show() ;
         }
         else{

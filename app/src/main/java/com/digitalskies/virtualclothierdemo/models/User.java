@@ -10,6 +10,8 @@ public class User {
 
     private List<String> favoriteProducts;
 
+    private List<String> productsInCart;
+
     public void setName(String name) {
         this.name = name;
     }
@@ -31,6 +33,13 @@ public class User {
 
     public void setFavoriteProducts(List<String>favoriteProducts) {
         this.favoriteProducts = favoriteProducts;
+    }
+    public List<String> getProductsInCart() {
+        return productsInCart;
+    }
+
+    public void setProductsInCart(List<String> productsInCart) {
+        this.productsInCart = productsInCart;
     }
 
 

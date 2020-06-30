@@ -1,5 +1,6 @@
 <resources>
     <string name="shr_app_name">VirtualClothier</string>
+    <string name="shr_toolbar_title">VIRTUALCLOTHIER</string>
     <string name="shr_hint_email">Email</string>
     <string name="shr_hint_password">Password</string>
     <string name="shr_button_next">Sign In</string>
@@ -53,9 +54,11 @@
     <string name="product_detail">Product Details</string>
     <string name="price_prefix">$</string>
     <string name="product_description">Product Description</string>
-    <string name="checkout">Checkout</string>
+    <string name="add_to_cart">Add To Cart</string>
     <string name="projects_search_hint">Search products...</string>
     <string name="favorites">Favorites</string>
     <string name="sign_out">Sign Out</string>
+    <string name="product_entry">Product Entry</string>
+    <string name="not_registered">Not registered? register</string>
 
 </resources>

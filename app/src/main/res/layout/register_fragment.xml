@@ -40,8 +40,7 @@
             android:paddingStart="24dp"
             android:paddingTop="50dp"
             android:paddingEnd="24dp"
-            android:paddingBottom="0dp"
-            tools:context="com.digitalskies.virtualclothierdemo.RegisterActivity">
+            android:paddingBottom="0dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_user_email"
@@ -96,16 +95,74 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/register"
+                android:id="@+id/register_button"
                 style="@style/Widget.Shrine.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:onClick="register"
                 android:text="@string/register"
                 app:layout_constraintEnd_toEndOf="@+id/til_confirm_password"
                 app:layout_constraintStart_toStartOf="@+id/til_confirm_password"
                 app:layout_constraintTop_toBottomOf="@+id/til_confirm_password" />
+
+            <TextView
+                android:id="@+id/or"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Or"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/til_confirm_password"
+                app:layout_constraintTop_toBottomOf="@+id/register_button" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/divider_color"
+                android:textAlignment="center"
+                android:visibility="visible"
+                app:layout_constraintEnd_toStartOf="@+id/or"
+                app:layout_constraintStart_toStartOf="@+id/til_confirm_password"
+                app:layout_constraintTop_toBottomOf="@+id/register_button" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="25dp"
+                android:background="@color/divider_color"
+                app:layout_constraintEnd_toEndOf="@+id/til_confirm_password"
+                app:layout_constraintStart_toEndOf="@+id/or"
+                app:layout_constraintTop_toBottomOf="@+id/register_button" />
+
+            <TextView
+                android:id="@+id/tv_sign_in_with_google"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/sign_in_with_google"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/guideline8"
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+            <ImageView
+                android:id="@+id/image_google_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:contentDescription="@string/sign_in_with_google_icon"
+                android:visibility="visible"
+                app:layout_constraintEnd_toStartOf="@+id/tv_sign_in_with_google"
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                app:srcCompat="@drawable/fui_ic_googleg_color_24dp" />
 
             <ProgressBar
                 android:id="@+id/register_progress"
@@ -117,6 +174,13 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.27" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

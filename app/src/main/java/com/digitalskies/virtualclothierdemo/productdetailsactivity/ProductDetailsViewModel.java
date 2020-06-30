@@ -6,9 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.digitalskies.virtualclothierdemo.Event;
 import com.digitalskies.virtualclothierdemo.Repository;
 
-import java.util.ArrayList;
+
 
 public class ProductDetailsViewModel extends AndroidViewModel {
 
@@ -16,12 +17,16 @@ public class ProductDetailsViewModel extends AndroidViewModel {
 
     public ProductDetailsViewModel(@NonNull Application application) {
         super(application);
-        repository = Repository.getRepository();
+        repository = Repository.getRepository(application);
     }
     public void updateFavorites(String name,Boolean isFavorite){
         repository.updateFavorites(name,isFavorite);
+
     }
-    public LiveData<String> favoritesUpdated(){
+    public void addProductToCart(String productName){
+        repository.addProductToCart(productName);
+    }
+    public LiveData<Event<String>> favoritesUpdated(){
         return repository.getIfFavsUpdated();
     }
 }

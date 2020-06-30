@@ -14,8 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Shrine">
-        <activity android:name="com.digitalskies.virtualclothierdemo.productdetailsactivity.ProductDetailsActivity"></activity>
-        <activity android:name="com.digitalskies.virtualclothierdemo.RegisterActivity" />
+        <activity android:name="com.digitalskies.virtualclothierdemo.productdetailsactivity.ProductDetailsActivity"/>
         <activity android:name="com.digitalskies.virtualclothierdemo.productentryactivity.ProductEntryActivity" />
         <activity android:name="com.digitalskies.virtualclothierdemo.mainactivity.MainActivity">
             <intent-filter>

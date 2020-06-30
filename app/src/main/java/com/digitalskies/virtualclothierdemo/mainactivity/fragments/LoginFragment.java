@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.digitalskies.virtualclothierdemo.RegisterActivity;
-import com.digitalskies.virtualclothierdemo.SignInUtil;
+import com.digitalskies.virtualclothierdemo.mainactivity.SignInUtil;
+import com.digitalskies.virtualclothierdemo.mainactivity.NavigationHost;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
@@ -25,6 +25,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.codelabs.mdc.java.virtualclothierdemo.R;
 
+import static com.digitalskies.virtualclothierdemo.mainactivity.SignInUtil.RC_SIGN_IN;
+
 /**
  * Fragment representing the login screen for Shrine.
  */
@@ -33,25 +35,26 @@ public class LoginFragment extends Fragment {
     private SignInUtil signInUtil;
     private MaterialButton signInButton;
     private TextInputEditText passwordEditText;
-    private TextInputLayout passwordTextInput;
+    private TextInputLayout emailTextInput,passwordTextInput;
     private TextView signInWithGoogleBtn,register;
     private TextInputEditText emailEditText;
     private ProgressBar signInProgress;
+    public static final String USER_IS_ADMIN = "com.digitalskies.virtualclothierdemo.LoginFragment";
 
 
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.login_fragment, container, false);
 
-        signInUtil = new SignInUtil(getActivity(),this,new ProductFragment());
+        signInUtil = SignInUtil.getSignInUtil();
 
         emailEditText = view.findViewById(R.id.email_edit_text);
+        emailTextInput=view.findViewById(R.id.email_til);
         passwordTextInput = view.findViewById(R.id.password_til);
         passwordEditText = view.findViewById(R.id.password_edit_text);
         signInWithGoogleBtn = view.findViewById(R.id.sign_in_with_google);
-        register=view.findViewById(R.id.register);
+        register=view.findViewById(R.id.register_here);
         signInButton = view.findViewById(R.id.button_sign_in);
         signInProgress=view.findViewById(R.id.sign_in_progress);
 
@@ -64,23 +67,10 @@ public class LoginFragment extends Fragment {
 
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        signInUtil.attachListener();
-    }
-
-    @Override
-    public void onDestroy() {
-        signInUtil.detachListener();
-        super.onDestroy();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode== SignInUtil.RC_SIGN_IN){
+        if(requestCode== RC_SIGN_IN){
             setUpProgressBarVisibility(ProgressBar.VISIBLE);
             try {
                 Task<GoogleSignInAccount> task= GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -100,12 +90,16 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (emailEditText.getText().toString().isEmpty()||passwordEditText.getText().toString().isEmpty()){
-                    passwordTextInput.setError("Input the empty fields");
+                if (emailEditText.getText().toString().isEmpty()){
+                    emailTextInput.setError("Input the email");
+                }
+                if(passwordEditText.getText().toString().isEmpty()){
+                    passwordTextInput.setError("Input the password");
                 }
                 else {
-                    passwordTextInput.setError(null);// Clear the error
-                    //add to back stack is false so that user doesn't go back to login screen
+                    emailTextInput.setError(null);
+                    passwordTextInput.setError(null);
+                    setUpProgressBarVisibility(ProgressBar.VISIBLE);
                     signInUtil.signInWithEmailAndPassword(emailEditText.getText().toString(),passwordEditText.getText().toString());
                 }
 
@@ -116,6 +110,7 @@ public class LoginFragment extends Fragment {
         signInWithGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 signInUtil.signInWithGoogle();
             }
         });
@@ -125,7 +120,7 @@ public class LoginFragment extends Fragment {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), RegisterActivity.class));
+                ((NavigationHost)getActivity()).navigateTo(new RegisterFragment(),true);
             }
         });
     }

@@ -1,10 +1,8 @@
-package com.digitalskies.virtualclothierdemo.staggeredgridlayout;
+package com.digitalskies.virtualclothierdemo.recycleradapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,8 +12,6 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.codelabs.mdc.java.virtualclothierdemo.R;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class StaggeredProductCardViewHolder extends RecyclerView.ViewHolder {

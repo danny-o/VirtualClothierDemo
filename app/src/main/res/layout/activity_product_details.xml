@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:isScrollContainer="true"
+    android:overScrollMode="ifContentScrolls"
     android:scrollbars="vertical"
+    app:layout_scrollFlags="scroll"
     tools:context="com.digitalskies.virtualclothierdemo.productdetailsactivity.ProductDetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/activity_product_toolbar"
+            android:id="@+id/product_details_toolbar"
             style="@style/Widget.Shrine.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -72,7 +74,7 @@
         app:layout_constraintStart_toStartOf="@+id/product_image"
         app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/expand_ic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -81,53 +83,101 @@
         android:src="@drawable/ic_expand_less_black_24dp"
         android:tint="@android:color/black"
         app:layout_constraintEnd_toStartOf="@+id/product_description"
-        app:layout_constraintTop_toBottomOf="@+id/tv_product_price" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_product_price" />-->
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/product_details_ll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:baselineAligned="false"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="0dp"
+        android:paddingStart="0dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        android:onClick="expandProductDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_product_price">
+
+        <ImageView
+            android:id="@+id/expand_ic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="expandProductDescription"
+            android:src="@drawable/icon_expand_less"
+            android:tint="@android:color/black" />
+
+        <TextView
+            android:id="@+id/et_product_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:onClick="expandProductDescription"
+            android:text="@string/product_description"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <!-- <TextView
         android:id="@+id/product_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@color/colorPrimary"
         android:onClick="expandProductDescription"
         android:text="@string/product_description"
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_product_price" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_product_price" />-->
 
     <TextView
         android:id="@+id/description_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:paddingStart="50dp"
+        android:paddingEnd="30dp"
         android:text="description"
-        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toStartOf="@+id/product_description"
-        app:layout_constraintTop_toBottomOf="@+id/product_description" />
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_details_ll" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.81" />
+        app:layout_constraintGuide_percent="0.81265205" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.18" />
 
     <Button
-        android:id="@+id/checkout"
+        android:id="@+id/add_to_cart"
         style="@style/Widget.Shrine.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/checkout"
+        android:onClick="addToCart"
+        android:text="@string/add_to_cart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description_details" />
@@ -142,7 +192,7 @@
         android:onClick="setIfFavorite"
         app:layout_constraintBottom_toTopOf="@+id/tv_product_price"
         app:layout_constraintStart_toEndOf="@+id/product_name"
-        app:srcCompat="@drawable/ic_favorite_border_24dp" />
+        app:srcCompat="@drawable/icon_favorite_border" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

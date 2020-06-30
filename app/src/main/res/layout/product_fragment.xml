@@ -28,30 +28,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/app_bar"
             style="@style/Widget.Shrine.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:paddingStart="12dp"
-            android:paddingLeft="12dp"
-            android:paddingEnd="12dp"
-            android:paddingRight="12dp"
-            app:contentInsetStart="0dp"
-            app:navigationIcon="@drawable/shr_branded_menu"
-            app:title="@string/shr_app_name">
+            app:contentInsetStart="8dp"
+            app:contentInsetStartWithNavigation="20dp"
+            app:navigationIcon="@drawable/icon_menu"
+            app:title="@string/shr_app_name"
+            app:titleMargin="2dp">
+
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layoutDirection="rtl">
 
+                <include
+                    android:id="@+id/cart_container"
+                    layout="@layout/custom_action_item_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true" />
+
                 <SearchView
                     android:id="@+id/search"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-
+                    android:layout_toLeftOf="@id/cart_container"
                     android:queryBackground="@color/White" />
             </RelativeLayout>
 
@@ -75,7 +81,7 @@
             android:id="@+id/product_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/shr_staggered_product_card_second" />
+            tools:listitem="@layout/product_card" />
 
     </androidx.core.widget.NestedScrollView>
 

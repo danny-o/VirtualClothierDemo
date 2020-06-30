@@ -13,6 +13,8 @@ public class Product implements Parcelable {
     private String productDescription;
     @Exclude
     private boolean isFavorite;
+    @Exclude
+    private boolean isInCart;
 
     public Product(){
 
@@ -20,10 +22,11 @@ public class Product implements Parcelable {
 
 
 
-    public Product(String name, String productCategory, int price){
+    public Product(String name, String productCategory, int price,String productDescription){
         this.name=name;
         this.price=price;
         this.productCategory=productCategory;
+        this.productDescription=productDescription;
     }
 
     protected Product(Parcel in) {
@@ -33,6 +36,7 @@ public class Product implements Parcelable {
         price = in.readInt();
         productDescription = in.readString();
         isFavorite = in.readByte() != 0;
+        isInCart = in.readByte() != 0;
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -89,6 +93,13 @@ public class Product implements Parcelable {
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
+    public boolean isInCart() {
+        return isInCart;
+    }
+
+    public void setInCart(boolean inCart) {
+        isInCart = inCart;
+    }
 
     @Override
     public int describeContents() {
@@ -103,5 +114,6 @@ public class Product implements Parcelable {
         dest.writeInt(price);
         dest.writeString(productDescription);
         dest.writeByte((byte) (isFavorite ? 1 : 0));
+        dest.writeByte((byte) (isInCart ? 1 : 0));
     }
 }

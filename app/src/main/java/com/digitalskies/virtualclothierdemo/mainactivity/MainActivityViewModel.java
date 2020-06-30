@@ -18,7 +18,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
-        repository = Repository.getRepository();
+        repository = Repository.getRepository(application);
     }
     public void getProducts(){
         repository.getProducts();
@@ -26,13 +26,12 @@ public class MainActivityViewModel extends AndroidViewModel {
     public ArrayList<Product> getFavoriteProducts(){
         return repository.getFavoriteProducts();
     }
-    public void getFavoriteProductsNames() {
-        repository.getFavoriteProductsNames();
+    public void getFavAndCartProducts() {
+        repository.getFavAndCartProducts();
     }
 
     public LiveData<List<Product>> products(){
         return repository.productList();
     }
-
 
 }

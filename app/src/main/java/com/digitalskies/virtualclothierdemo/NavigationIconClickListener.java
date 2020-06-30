@@ -28,13 +28,6 @@ public class NavigationIconClickListener implements View.OnClickListener {
     private Drawable openIcon;
     private Drawable closeIcon;
 
-    NavigationIconClickListener(Context context, View sheet) {
-        this(context, sheet, null);
-    }
-
-    NavigationIconClickListener(Context context, View sheet, @Nullable Interpolator interpolator) {
-        this(context, sheet, interpolator, null, null);
-    }
 
     public NavigationIconClickListener(
             Context context, View sheet, @Nullable Interpolator interpolator,

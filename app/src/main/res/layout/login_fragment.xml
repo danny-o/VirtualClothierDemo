@@ -9,13 +9,20 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_sign_in"
-        style="@style/Widget.Shrine.Button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="12dp"
+        android:background="#FFFFFF"
+        android:backgroundTint="?attr/colorPrimaryDark"
         android:text="@string/shr_button_next"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="?android:attr/textColorPrimary"
+        app:cornerRadius="13dp"
+        app:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="@+id/password_til"
+        app:layout_constraintStart_toStartOf="@+id/password_til"
         app:layout_constraintTop_toBottomOf="@+id/password_til" />
 
     <TextView
@@ -30,19 +37,19 @@
         android:textAppearance="@style/TextAppearance.Shrine.Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:id="@+id/logo"
+        android:layout_width="73dp"
+        android:layout_height="73dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="64dp"
         android:tint="?android:attr/textColorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/shr_logo" />
+        app:srcCompat="@drawable/logo_icon" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_til"
@@ -89,41 +96,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.38" />
+        app:layout_constraintGuide_percent="0.33" />
 
     <TextView
         android:id="@+id/sign_in_with_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/sign_in_with_google"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_sign_in" />
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
     <ImageView
         android:id="@+id/google_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="16dp"
         android:contentDescription="@string/sign_in_with_google_icon"
         android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/sign_in_with_google"
-        app:layout_constraintTop_toBottomOf="@id/button_sign_in"
+        app:layout_constraintStart_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
         app:srcCompat="@drawable/fui_ic_googleg_color_24dp" />
-
-    <TextView
-        android:id="@+id/register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/register"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_with_google" />
 
     <ProgressBar
         android:id="@+id/sign_in_progress"
@@ -135,5 +133,70 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/not_registered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/not_registered"
+        app:layout_constraintStart_toStartOf="@+id/button_sign_in"
+        app:layout_constraintTop_toBottomOf="@+id/button_sign_in" />
+
+    <TextView
+        android:id="@+id/register_here"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="here"
+        android:textColor="#0E59EF"
+        app:layout_constraintStart_toEndOf="@+id/not_registered"
+        app:layout_constraintTop_toBottomOf="@+id/button_sign_in" />
+
+    <TextView
+        android:id="@+id/or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Or"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/not_registered" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/divider_color"
+        android:textAlignment="center"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/or"
+        app:layout_constraintStart_toStartOf="@+id/button_sign_in"
+        app:layout_constraintTop_toBottomOf="@+id/not_registered" />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="5dp"
+        android:background="@color/divider_color"
+        app:layout_constraintEnd_toEndOf="@+id/button_sign_in"
+        app:layout_constraintStart_toEndOf="@+id/or"
+        app:layout_constraintTop_toBottomOf="@+id/register_here" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.23" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

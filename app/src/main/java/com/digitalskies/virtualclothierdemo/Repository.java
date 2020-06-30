@@ -1,5 +1,6 @@
 package com.digitalskies.virtualclothierdemo;
 
+import android.app.Application;
 import android.net.Uri;
 import android.util.Log;
 
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class Repository {
     private static final String IMAGE_UPLOAD = "ImageUpload";
+    private Application application;
     private FirebaseFirestore firebaseFirestore;
     private Product product;
     private FirebaseStorage storage;
@@ -39,20 +41,23 @@ public class Repository {
     private static Integer uploadStatus;
     private List<Product> productList=new ArrayList<>();
     private boolean productsQueryComplete;
-    private boolean favProductsQueryComplete;
+    private boolean favAndCartQueryComplete;
     private List<String> favNameList=new ArrayList<>();
+    private List<String> cartProductsNames=new ArrayList<>();
     private ArrayList<Product> favProducts=new ArrayList<>();
+    private ArrayList<Product> productsInCart=new ArrayList<>();
     private FirebaseAuth firebaseAuth;
     private static Repository repository;
-    private MutableLiveData<String> favoritesUpdated=new MutableLiveData<>();
+    private MutableLiveData<Event<String>> favsAndCartUpdated =new MutableLiveData<>();
 
-   private Repository(){
+   private Repository(Application application){
+        this.application=application;
         initiateDatabase();
         initiateFireBaseAuth();
     }
-    public static Repository getRepository(){
+    public static Repository getRepository(Application application){
         if(repository==null){
-            repository=new Repository();
+            repository=new Repository(application);
         }
         return repository;
     }
@@ -60,7 +65,7 @@ public class Repository {
     public void initiateDatabase(){
         if(firebaseFirestore==null){
             productsQueryComplete=false;
-            favProductsQueryComplete=false;
+            favAndCartQueryComplete =false;
             firebaseFirestore=FirebaseFirestore.getInstance();
             collectionReference = firebaseFirestore.collection("products");
         }
@@ -71,8 +76,8 @@ public class Repository {
         }
     }
 
-    public  void createProduct(String productName, String productCategory,int price,Uri imageUri){
-        product=new Product(productName,productCategory,price);
+    public  void createProduct(String productName, String productCategory,int price,String productDescription,Uri imageUri){
+        product=new Product(productName,productCategory,price,productDescription);
         initiateStorage(productCategory,productName);
         uploadImage(imageUri, productName);
 
@@ -160,13 +165,13 @@ public class Repository {
 
                            }
                            productsQueryComplete=true;
-                               setIfFavorite();
+                               setIfFavOrInCart();
 
                        }
                    }
                });
     }
-    public  void getFavoriteProductsNames(){
+    public  void getFavAndCartProducts(){
         firebaseAuth = FirebaseAuth.getInstance();
 
         final DocumentReference documentReference=firebaseFirestore.collection("users").document(firebaseAuth.getCurrentUser().getUid());
@@ -177,10 +182,14 @@ public class Repository {
                     favNameList.clear();
                     favNameList = (List<String>) task.getResult().get("favoriteProducts");
 
+                    cartProductsNames.clear();
+                    cartProductsNames =(List<String>) task.getResult().get("productsInCart");
 
-                    favProductsQueryComplete=true;
 
-                    setIfFavorite();
+                    favAndCartQueryComplete =true;
+
+                    setIfFavOrInCart();
+
 
 
                 }
@@ -191,26 +200,41 @@ public class Repository {
         });
     }
 
-    private void setIfFavorite() {
-        if(productsQueryComplete&&favProductsQueryComplete) {
+    private void setIfFavOrInCart() {
+        if(productsQueryComplete&& favAndCartQueryComplete) {
             String productName;
             favProducts.clear();
+            productsInCart.clear();
             for (int i = 0; i < productList.size(); i++) {
                 productName = productList.get(i).getName();
-                for (int j = 0; j < favNameList.size(); j++) {
-                    if (productName.equals(favNameList.get(j))) {
-                        productList.get(i).setFavorite(true);
-                        favProducts.add(productList.get(i));
+                    for (int j = 0; j < favNameList.size(); j++) {
+                        if (productName.equals(favNameList.get(j))) {
+                            productList.get(i).setFavorite(true);
+                            favProducts.add(productList.get(i));
+                            break;
+                        }
+                }
+
+
+            }
+            for (int i = 0; i < productList.size(); i++) {
+                productName = productList.get(i).getName();
+                for (int j = 0; j < cartProductsNames.size(); j++) {
+                    if (productName.equals(cartProductsNames.get(j))) {
+                        productList.get(i).setInCart(true);
+                        productsInCart.add(productList.get(i));
                         break;
                     }
                 }
+
+
             }
-            favProductsQueryComplete = false;
+            favAndCartQueryComplete = false;
             productsQueryComplete = false;
             productsLiveData.setValue(productList);
         }
     }
-    public void updateFavorites(String productName, boolean isfavorite){
+    public void updateFavorites(String productName, final boolean isfavorite){
 
         if(isfavorite){
             favNameList.add(productName);
@@ -225,18 +249,44 @@ public class Repository {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                          favoritesUpdated.setValue("Added to favorites successfully");
+                            if(isfavorite)
+                                favsAndCartUpdated.setValue(new Event<>("Product added to favorites"));
+                            else{
+                                favsAndCartUpdated.setValue(new Event<>("Product removed from favorites"));
+                            }
                         }
                         else{
 
-                            favoritesUpdated.setValue("Added to favorites failed");
+                            favsAndCartUpdated.setValue(new Event<>("Failed to add to favorites"));
                         }
                     }
                 });
 
     }
-    public LiveData<String> getIfFavsUpdated(){
-        return favoritesUpdated;
+    public void addProductToCart(String productName){
+
+
+       cartProductsNames.add(productName);
+
+        firebaseFirestore.collection("users")
+                .document(firebaseAuth.getCurrentUser().getUid())
+                .update("productsInCart", cartProductsNames)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            favsAndCartUpdated.setValue(new Event<>("Product added to cart"));
+                        }
+                        else{
+
+                            favsAndCartUpdated.setValue(new Event<>("Failed to add to cart"));
+                        }
+                    }
+                });
+
+    }
+    public LiveData<Event<String>> getIfFavsUpdated(){
+        return favsAndCartUpdated;
     }
 
     public LiveData<List<Product>> productList(){
@@ -244,6 +294,9 @@ public class Repository {
     }
     public ArrayList<Product> getFavoriteProducts(){
        return favProducts;
+    }
+    public ArrayList<Product> getProductsInCart(){
+        return productsInCart;
     }
 
     public LiveData<Integer> getProductUploadStatus() {

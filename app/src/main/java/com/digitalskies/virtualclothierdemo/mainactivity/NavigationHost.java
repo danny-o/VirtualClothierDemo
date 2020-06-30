@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.interfaces;
+package com.digitalskies.virtualclothierdemo.mainactivity;
 
 import androidx.fragment.app.Fragment;
 
