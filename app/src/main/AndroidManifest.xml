@@ -7,16 +7,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.digitalskies.virtualclothierdemo.application.VirtualClothierApllication"
+        android:name="com.digitalskies.virtualclothierdemo.application.VirtualClothierApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/shr_app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Shrine">
-        <activity android:name="com.digitalskies.virtualclothierdemo.productdetailsactivity.ProductDetailsActivity"/>
-        <activity android:name="com.digitalskies.virtualclothierdemo.productentryactivity.ProductEntryActivity" />
-        <activity android:name="com.digitalskies.virtualclothierdemo.mainactivity.MainActivity">
+        <activity android:name="com.digitalskies.virtualclothierdemo.ui.checkoutactivity.CheckOutActivity"></activity>
+        <activity android:name="com.digitalskies.virtualclothierdemo.ui.productdetailsactivity.ProductDetailsActivity" />
+        <activity android:name="com.digitalskies.virtualclothierdemo.ui.productentryactivity.ProductEntryActivity" />
+        <activity android:name="com.digitalskies.virtualclothierdemo.ui.mainactivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -60,5 +60,6 @@
     <string name="sign_out">Sign Out</string>
     <string name="product_entry">Product Entry</string>
     <string name="not_registered">Not registered? register</string>
+    <string name="checkout">Checkout</string>
 
 </resources>

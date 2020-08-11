@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.productentryactivity;
+package com.digitalskies.virtualclothierdemo.ui.productentryactivity;
 
 public interface ToastMessage {
 

@@ -7,5 +7,6 @@
         app:actionLayout="@layout/custom_action_item_layout"
         android:icon="@drawable/icon_shopping_cart"
         android:title="Cart"
+        android:onClick="goToCheckoutActivity"
         app:showAsAction="always" />
 </menu>

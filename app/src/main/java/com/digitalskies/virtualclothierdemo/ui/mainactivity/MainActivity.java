@@ -1,7 +1,8 @@
-package com.digitalskies.virtualclothierdemo.mainactivity;
+package com.digitalskies.virtualclothierdemo.ui.mainactivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -11,9 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.digitalskies.virtualclothierdemo.mainactivity.fragments.LoginFragment;
-import com.digitalskies.virtualclothierdemo.mainactivity.fragments.ProductFragment;
-import com.digitalskies.virtualclothierdemo.recycleradapter.StaggeredProductCardRecyclerViewAdapter;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.LoginFragment;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.ProductFragment;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.recycleradapter.StaggeredProductCardRecyclerViewAdapter;
 import com.google.codelabs.mdc.java.virtualclothierdemo.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationHost {
@@ -91,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationHost {
             transaction.commit();
 
         }
-
 
 
 

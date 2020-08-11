@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.recycleradapter;
+package com.digitalskies.virtualclothierdemo.ui.mainactivity.recycleradapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.digitalskies.virtualclothierdemo.productdetailsactivity.ProductDetailsActivity;
+import com.digitalskies.virtualclothierdemo.ui.productdetailsactivity.ProductDetailsActivity;
 import com.digitalskies.virtualclothierdemo.models.Product;
 import com.google.android.material.card.MaterialCardView;
 import com.google.codelabs.mdc.java.virtualclothierdemo.R;
@@ -25,7 +25,7 @@ public class StaggeredProductCardViewHolder extends RecyclerView.ViewHolder {
 
     StaggeredProductCardViewHolder(@NonNull View itemView, final Context context) {
         super(itemView);
-        productImage = itemView.findViewById(R.id.product_image);
+        productImage = itemView.findViewById(R.id.item_product_image);
         productName = itemView.findViewById(R.id.product_title);
         productPrice = itemView.findViewById(R.id.tv_product_price);
         product=new Product();

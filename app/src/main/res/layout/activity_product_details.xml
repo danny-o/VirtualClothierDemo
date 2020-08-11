@@ -8,7 +8,7 @@
     android:overScrollMode="ifContentScrolls"
     android:scrollbars="vertical"
     app:layout_scrollFlags="scroll"
-    tools:context="com.digitalskies.virtualclothierdemo.productdetailsactivity.ProductDetailsActivity">
+    tools:context="com.digitalskies.virtualclothierdemo.ui.productdetailsactivity.ProductDetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/abl_activity_product"
@@ -34,7 +34,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <ImageView
-        android:id="@+id/product_image"
+        android:id="@+id/item_product_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
@@ -59,9 +59,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/black"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/product_image"
-        app:layout_constraintStart_toStartOf="@+id/product_image"
-        app:layout_constraintTop_toBottomOf="@+id/product_image" />
+        app:layout_constraintEnd_toEndOf="@+id/item_product_image"
+        app:layout_constraintStart_toStartOf="@+id/item_product_image"
+        app:layout_constraintTop_toBottomOf="@+id/item_product_image" />
 
     <TextView
         android:id="@+id/tv_product_price"
@@ -70,8 +70,8 @@
         android:text="@string/product_price"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/product_image"
-        app:layout_constraintStart_toStartOf="@+id/product_image"
+        app:layout_constraintEnd_toEndOf="@+id/item_product_image"
+        app:layout_constraintStart_toStartOf="@+id/item_product_image"
         app:layout_constraintTop_toBottomOf="@+id/product_name" />
 
     <!--<ImageView

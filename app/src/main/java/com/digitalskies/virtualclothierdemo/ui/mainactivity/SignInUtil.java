@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.mainactivity;
+package com.digitalskies.virtualclothierdemo.ui.mainactivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,9 +10,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.digitalskies.virtualclothierdemo.mainactivity.fragments.RegisterFragment;
-import com.digitalskies.virtualclothierdemo.mainactivity.fragments.LoginFragment;
-import com.digitalskies.virtualclothierdemo.mainactivity.fragments.ProductFragment;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.RegisterFragment;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.LoginFragment;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.ProductFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -43,7 +43,7 @@ public class SignInUtil{
     private static final  String TAG="Sign in";
     private Activity activity;
     private static SignInUtil signInUtil;
-    private Boolean isANewUser=false;
+    private Boolean isANewUser=true;
     private final SharedPreferences sharedPreferences;
 
     private SignInUtil(Activity activity){
@@ -97,8 +97,10 @@ public class SignInUtil{
     public boolean isSignedIn(){
         if(firebaseAuth==null){
             firebaseAuth=FirebaseAuth.getInstance();
+
         }
-        return firebaseAuth.getCurrentUser() != null;
+        isANewUser=firebaseAuth.getCurrentUser()==null;
+        return firebaseAuth.getCurrentUser() !=null;
     }
     public void signOut(){
 
@@ -156,7 +158,7 @@ public class SignInUtil{
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            isANewUser=false;
+                            isANewUser=true;
                             checkIfAdmin();
 
                         }
@@ -211,6 +213,7 @@ public class SignInUtil{
 
                             }
                             else{
+                                isANewUser=true;
                                 checkIfAdmin();
                             }
 
@@ -266,6 +269,15 @@ public class SignInUtil{
 
     public boolean getIfAdmin(){
        return sharedPreferences.getBoolean("isAdmin",false);
+    }
+    public String getUserName(){
+        return firebaseAuth.getCurrentUser().getDisplayName();
+    }
+    public boolean getIfIsANewUser(){
+        return  isANewUser;
+    }
+    public void setIfIsANewUser(boolean isANewUser){
+        this.isANewUser=isANewUser;
     }
     public void detachListener(){
         firebaseAuth.removeAuthStateListener(mAuthStateListener);

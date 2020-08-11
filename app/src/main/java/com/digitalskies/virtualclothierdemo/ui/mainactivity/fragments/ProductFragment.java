@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.mainactivity.fragments;
+package com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -30,21 +31,32 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import com.digitalskies.virtualclothierdemo.NavigationIconClickListener;
-import com.digitalskies.virtualclothierdemo.mainactivity.SignInUtil;
-import com.digitalskies.virtualclothierdemo.mainactivity.MainActivityViewModel;
+import com.digitalskies.virtualclothierdemo.ScheduleWork;
+import com.digitalskies.virtualclothierdemo.notification.NotificationWorker;
+import com.digitalskies.virtualclothierdemo.ui.checkoutactivity.CheckOutActivity;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.SignInUtil;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.MainActivityViewModel;
 import com.digitalskies.virtualclothierdemo.models.Product;
-import com.digitalskies.virtualclothierdemo.productentryactivity.ProductEntryActivity;
-import com.digitalskies.virtualclothierdemo.recycleradapter.StaggeredProductCardRecyclerViewAdapter;
+import com.digitalskies.virtualclothierdemo.ui.productentryactivity.ProductEntryActivity;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.recycleradapter.StaggeredProductCardRecyclerViewAdapter;
 import com.google.android.material.button.MaterialButton;
 import com.google.codelabs.mdc.java.virtualclothierdemo.R;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ProductFragment extends Fragment {
+public class ProductFragment extends Fragment implements ScheduleWork {
     private Toolbar toolbar;
     private View view;
     private SearchView searchView;
@@ -56,6 +68,7 @@ public class ProductFragment extends Fragment {
     private ProgressBar progressBar;
     private static final int ADD_PRODUCT = 12;
     private Boolean isAdmin=false;
+    private SignInUtil signInUtil;
     private Observer<List<Product>> observer=new Observer<List<Product>>() {
         @Override
         public void onChanged(List<Product> productList) {
@@ -70,11 +83,13 @@ public class ProductFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        signInUtil=SignInUtil.getSignInUtil();
         if(savedInstanceState!=null){
             isAdmin=savedInstanceState.getBoolean("isAdmin");
         }
         else{
-            isAdmin=SignInUtil.getSignInUtil().getIfAdmin();
+
+            isAdmin=signInUtil.getIfAdmin();
         }
 
     }
@@ -109,9 +124,8 @@ public class ProductFragment extends Fragment {
         signOut = view.findViewById(R.id.sign_out);
         favorites=view.findViewById(R.id.favorites);
         searchView=view.findViewById(R.id.search);
-        cartContainer =view.findViewById(R.id.cart_container);
         cartBadge =view.findViewById(R.id.cart_badge);
-
+        cartContainer=view.findViewById(R.id.cart_container);
 
         progressBar.setVisibility(ProgressBar.INVISIBLE);
         Log.d("MainActivity",getActivity().getLifecycle().getCurrentState().toString());
@@ -120,8 +134,7 @@ public class ProductFragment extends Fragment {
         setUpRecyclerView();
         setButtonOnClickListeners();
         setUpSearch();
-        setCartItemCount();
-
+        setUpCartBadge();
         return  view;
 
     }
@@ -132,8 +145,8 @@ public class ProductFragment extends Fragment {
         mainActivityViewModel.getProducts();
         mainActivityViewModel.getFavAndCartProducts();
         productsAdapter.notifyDataSetChanged();
-        setCartItemCount();
-        
+        scheduleCartReminder();
+        setUpCartBadge();
     }
 
 
@@ -221,6 +234,7 @@ public class ProductFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.product_fragment_menu, menu);
+
     }
 
     @Override
@@ -233,7 +247,7 @@ public class ProductFragment extends Fragment {
 
 
     }
-    private void setCartItemCount() {
+    private void setUpCartBadge() {
 
         cartItemCount = sharedPreferences.getInt("PRODUCTS_IN_CART",0);
         if(cartItemCount ==0){
@@ -247,6 +261,13 @@ public class ProductFragment extends Fragment {
             }
 
         }
+        cartContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getActivity(), CheckOutActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
     private void setUpSearch() {
@@ -263,7 +284,7 @@ public class ProductFragment extends Fragment {
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-               cartContainer.setVisibility(View.VISIBLE);
+                cartContainer.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -289,6 +310,31 @@ public class ProductFragment extends Fragment {
         productsAdapter.setProductList(productList);
         productsAdapter.notifyDataSetChanged();
         progressBar.setVisibility(ProgressBar.INVISIBLE);
+    }
+
+    @Override
+    public void scheduleCartReminder() {
+        if(cartItemCount!=0){
+            if(signInUtil.getIfIsANewUser()){
+                Constraints constraints=new Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build();
+                Data data=new Data.Builder()
+                        .putString(NotificationWorker.USERNAME,SignInUtil.getSignInUtil().getUserName())
+                        .build();
+
+                WorkRequest notificationRequest=new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                        .setInitialDelay(1, TimeUnit.MINUTES)
+                        .setInputData(data)
+                        .setConstraints(constraints)
+                        .build();
+                WorkManager.getInstance(requireActivity()).enqueue(notificationRequest);
+                signInUtil.setIfIsANewUser(false);
+
+            }
+
+        }
+
     }
 
 }

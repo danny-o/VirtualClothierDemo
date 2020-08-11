@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.productentryactivity;
+package com.digitalskies.virtualclothierdemo.ui.productentryactivity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,7 +58,7 @@ public class ProductEntryActivity extends AppCompatActivity implements ToastMess
         productCategory=findViewById(R.id.et_product_category);
         productDescription=findViewById(R.id.et_product_description);
         saveButton=findViewById(R.id.save_button);
-        productImage=findViewById(R.id.product_image);
+        productImage=findViewById(R.id.item_product_image);
         uploadProgress=findViewById(R.id.uploadProgress);
         hideProgressBar();
         productImage.setOnClickListener(new View.OnClickListener() {

@@ -4,11 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import androidx.appcompat.app.AppCompatDelegate;
 
-public class VirtualClothierApllication extends Application {
-    private static VirtualClothierApllication instance;
+public class VirtualClothierApplication extends Application {
+    private static VirtualClothierApplication instance;
     private static Context appContext;
 
-    public static VirtualClothierApllication getInstance() {
+    public static VirtualClothierApplication getInstance() {
         return instance;
     }
 

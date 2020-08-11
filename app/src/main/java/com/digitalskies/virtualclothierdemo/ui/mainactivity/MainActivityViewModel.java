@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.mainactivity;
+package com.digitalskies.virtualclothierdemo.ui.mainactivity;
 
 import android.app.Application;
 

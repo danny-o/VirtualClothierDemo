@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.recycleradapter;
+package com.digitalskies.virtualclothierdemo.ui.mainactivity.recycleradapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

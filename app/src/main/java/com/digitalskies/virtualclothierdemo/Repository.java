@@ -1,6 +1,8 @@
 package com.digitalskies.virtualclothierdemo;
 
+import android.app.Activity;
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 
@@ -165,7 +167,8 @@ public class Repository {
 
                            }
                            productsQueryComplete=true;
-                               setIfFavOrInCart();
+                               setFavProductList();
+                               setCartProductList();
 
                        }
                    }
@@ -188,7 +191,8 @@ public class Repository {
 
                     favAndCartQueryComplete =true;
 
-                    setIfFavOrInCart();
+                    setFavProductList();
+                    setCartProductList();
 
 
 
@@ -200,39 +204,47 @@ public class Repository {
         });
     }
 
-    private void setIfFavOrInCart() {
+    private void setFavProductList(){
         if(productsQueryComplete&& favAndCartQueryComplete) {
             String productName;
             favProducts.clear();
             productsInCart.clear();
             for (int i = 0; i < productList.size(); i++) {
                 productName = productList.get(i).getName();
-                    for (int j = 0; j < favNameList.size(); j++) {
-                        if (productName.equals(favNameList.get(j))) {
-                            productList.get(i).setFavorite(true);
-                            favProducts.add(productList.get(i));
-                            break;
-                        }
-                }
-
-
-            }
-            for (int i = 0; i < productList.size(); i++) {
-                productName = productList.get(i).getName();
-                for (int j = 0; j < cartProductsNames.size(); j++) {
-                    if (productName.equals(cartProductsNames.get(j))) {
-                        productList.get(i).setInCart(true);
-                        productsInCart.add(productList.get(i));
+                for (int j = 0; j < favNameList.size(); j++) {
+                    if (productName.equals(favNameList.get(j))) {
+                        productList.get(i).setFavorite(true);
+                        favProducts.add(productList.get(i));
                         break;
                     }
                 }
 
 
             }
-            favAndCartQueryComplete = false;
-            productsQueryComplete = false;
-            productsLiveData.setValue(productList);
         }
+    }
+
+    private void setCartProductList() {
+       if(productsQueryComplete&& favAndCartQueryComplete){
+           String productName;
+           productsInCart.clear();
+           for (int i = 0; i < productList.size(); i++) {
+               productName = productList.get(i).getName();
+               for (int j = 0; j < cartProductsNames.size(); j++) {
+                   if (productName.equals(cartProductsNames.get(j))) {
+                       productList.get(i).setInCart(true);
+                       productsInCart.add(productList.get(i));
+                       break;
+                   }
+               }
+
+
+           }
+           favAndCartQueryComplete = false;
+           productsQueryComplete = false;
+           productsLiveData.setValue(productList);
+       }
+
     }
     public void updateFavorites(String productName, final boolean isfavorite){
 
@@ -263,10 +275,20 @@ public class Repository {
                 });
 
     }
-    public void addProductToCart(String productName){
+    public void updateCartProductNames(ArrayList<Product> productsInCart){
+       this.productsInCart=productsInCart;
+       cartProductsNames.clear();
+          for(int i=0;i<productsInCart.size();i++){
+              cartProductsNames.add(productsInCart.get(i).getName());
+                }
+            updateCart();
+    }
+    public void updateCart(){
+        SharedPreferences sharedPreferences=application.getSharedPreferences("MY_PREFERENCES", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putInt("PRODUCTS_IN_CART",cartProductsNames.size());
+        editor.apply();
 
-
-       cartProductsNames.add(productName);
 
         firebaseFirestore.collection("users")
                 .document(firebaseAuth.getCurrentUser().getUid())
@@ -297,6 +319,9 @@ public class Repository {
     }
     public ArrayList<Product> getProductsInCart(){
         return productsInCart;
+    }
+    public  List<String> getCartProductsNames(){
+         return cartProductsNames;
     }
 
     public LiveData<Integer> getProductUploadStatus() {

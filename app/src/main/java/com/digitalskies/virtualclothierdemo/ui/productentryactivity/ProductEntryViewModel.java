@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.productentryactivity;
+package com.digitalskies.virtualclothierdemo.ui.productentryactivity;
 
 import android.app.Application;
 import android.net.Uri;

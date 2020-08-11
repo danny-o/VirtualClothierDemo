@@ -1,4 +1,4 @@
-package com.digitalskies.virtualclothierdemo.mainactivity.fragments;
+package com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.digitalskies.virtualclothierdemo.mainactivity.SignInUtil;
-import com.digitalskies.virtualclothierdemo.mainactivity.NavigationHost;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.SignInUtil;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.NavigationHost;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
@@ -25,7 +25,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.codelabs.mdc.java.virtualclothierdemo.R;
 
-import static com.digitalskies.virtualclothierdemo.mainactivity.SignInUtil.RC_SIGN_IN;
+import static com.digitalskies.virtualclothierdemo.ui.mainactivity.SignInUtil.RC_SIGN_IN;
 
 /**
  * Fragment representing the login screen for Shrine.
