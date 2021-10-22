@@ -558,7 +558,7 @@ public class ProductFragment extends Fragment implements ScheduleWork, OnNavigat
         SearchManager searchManager=(SearchManager)getActivity().getSystemService(Context.SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
-        
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
