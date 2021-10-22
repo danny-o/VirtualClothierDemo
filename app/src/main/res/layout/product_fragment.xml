@@ -4,86 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_theme_color"
     tools:context="com.digitalskies.virtualclothierdemo.ui.mainactivity.MainActivity">
 
-    <LinearLayout
-        style="@style/Widget.VirtualClothier.Backdrop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingTop="100dp"
-        android:paddingBottom="100dp">
-
-        <include layout="@layout/v_clothier_backdrop" />
-
-    </LinearLayout>
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:elevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/app_bar"
-            style="@style/Widget.Shrine.Toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:contentInsetStart="8dp"
-            app:contentInsetStartWithNavigation="20dp"
-            app:navigationIcon="@drawable/icon_menu"
-            app:title="@string/shr_app_name"
-            app:titleMargin="2dp">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layoutDirection="rtl">
-
-                <include
-                    android:id="@+id/cart_container"
-                    layout="@layout/custom_action_item_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true" />
-
-                <SearchView
-                    android:id="@+id/search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/cart_container"
-                    android:queryBackground="@color/White" />
-            </RelativeLayout>
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
+    <!--<androidx.core.widget.NestedScrollView
         android:id="@+id/product_grid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="56dp"
+        android:layout_height="0dp"
         android:background="@color/productGridBackgroundColor"
         android:elevation="8dp"
+        android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_bar_layout">
+        app:layout_constraintTop_toBottomOf="@+id/product_search_view">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/product_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/product_card" />
 
-    </androidx.core.widget.NestedScrollView>
+
+    </androidx.core.widget.NestedScrollView>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/product_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_medium"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_first"
+        app:layout_constraintTop_toBottomOf="@id/category_horizontal_scroll_view"
+        app:spanCount="2"
+        tools:listitem="@layout/item_product" />
 
     <ProgressBar
         android:id="@+id/progress_bar_main"
@@ -94,6 +47,184 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_match_your_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_bold"
+        android:text="Match your style"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/guideline_vertical_first"
+        app:layout_constraintTop_toBottomOf="@+id/iv_profile" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/product_search_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:background="@drawable/search_view_background"
+
+        android:visibility="visible"
+        app:defaultQueryHint="Search"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_first"
+        app:layout_constraintTop_toBottomOf="@+id/text_match_your_style"
+        app:queryHint="Search" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <HorizontalScrollView
+        android:id="@+id/category_horizontal_scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+
+        android:layoutDirection="ltr"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_vertical_first"
+        app:layout_constraintTop_toBottomOf="@+id/product_search_view">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/product_categories_container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_vertical_first"
+            app:layout_constraintTop_toBottomOf="@+id/product_search_view">
+
+
+            <TextView
+                android:id="@+id/tv_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="@dimen/spacing_small"
+                android:background="@drawable/bar_black"
+                android:backgroundTint="@color/products_category_selector"
+                android:paddingStart="@dimen/text_padding_sides"
+                android:paddingTop="@dimen/text_padding_up_and_bottom"
+                android:paddingEnd="@dimen/text_padding_sides"
+                android:paddingBottom="@dimen/text_padding_up_and_bottom"
+                android:text="All"
+                android:tag="All"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_favorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:background="@drawable/bar_black"
+                android:backgroundTint="@color/products_category_selector"
+                android:paddingStart="@dimen/text_padding_sides"
+                android:paddingTop="@dimen/text_padding_up_and_bottom"
+                android:paddingEnd="@dimen/text_padding_sides"
+                android:paddingBottom="@dimen/text_padding_up_and_bottom"
+                android:text="Favorites"
+                android:tag="Favorites"
+                app:layout_constraintStart_toEndOf="@+id/tv_all"
+                app:layout_constraintTop_toTopOf="@+id/tv_all" />
+
+            <TextView
+                android:id="@+id/tv_trending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:background="@drawable/bar_black"
+                android:backgroundTint="@color/products_category_selector"
+                android:paddingStart="@dimen/text_padding_sides"
+                android:paddingTop="@dimen/text_padding_up_and_bottom"
+                android:paddingEnd="@dimen/text_padding_sides"
+                android:paddingBottom="@dimen/text_padding_up_and_bottom"
+                android:text="Trending"
+                android:tag="Trending"
+                app:layout_constraintStart_toEndOf="@+id/tv_favorites"
+                app:layout_constraintTop_toTopOf="@+id/tv_favorites" />
+
+            <TextView
+                android:id="@+id/tv_men"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/shr_product_grid_spacing_small"
+                android:background="@drawable/bar_black"
+                android:backgroundTint="@color/products_category_selector"
+                android:paddingStart="@dimen/text_padding_sides"
+                android:paddingTop="@dimen/text_padding_up_and_bottom"
+                android:paddingEnd="@dimen/text_padding_sides"
+                android:paddingBottom="@dimen/text_padding_up_and_bottom"
+                android:text="Men"
+                android:tag="Men"
+                app:layout_constraintStart_toEndOf="@+id/tv_trending"
+                app:layout_constraintTop_toTopOf="@+id/tv_all" />
+
+            <TextView
+                android:id="@+id/tv_women"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:background="@drawable/bar_black"
+                android:backgroundTint="@color/products_category_selector"
+                android:paddingStart="@dimen/text_padding_sides"
+                android:paddingTop="@dimen/text_padding_up_and_bottom"
+                android:paddingEnd="@dimen/text_padding_sides"
+                android:paddingBottom="@dimen/text_padding_up_and_bottom"
+                android:tag="Women"
+                android:text="Women"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tv_men"
+                app:layout_constraintTop_toTopOf="@+id/tv_favorites" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
+
+
+    <View
+        android:id="@+id/tv_scroll_to_end"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ic_keyboard_arrow_right_black_24dp"
+        android:backgroundTint="#616060"
+        app:layout_constraintBottom_toBottomOf="@id/category_horizontal_scroll_view"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toTopOf="@id/category_horizontal_scroll_view"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.07" />
+
+
+
+
+    <ImageView
+        android:id="@+id/iv_profile"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/spacing_x_large"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
         app:layout_constraintTop_toTopOf="parent" />
 
 

@@ -1,191 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
-
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/color_gradient"
+    android:paddingBottom="0dp">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/abl_activity_register"
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="@dimen/logo_icon_size"
+        android:layout_height="@dimen/logo_icon_size"
+        android:layout_gravity="center_horizontal"
+        android:tint="?android:attr/textColorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline_horizontal_top"
+        app:srcCompat="@drawable/logo_icon" />
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/activity_register_toolbar"
-            style="@style/Widget.Shrine.Toolbar"
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:lines="1"
+        android:text="@string/shr_app_name"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.Shrine.Title"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_start"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_user_email"
+        style="@style/Widget.Shrine.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_start"
+        app:layout_constraintTop_toTopOf="@id/guideline">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_email"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:paddingStart="12dp"
-            android:paddingLeft="12dp"
-            android:paddingEnd="12dp"
-            android:paddingRight="12dp"
-            app:contentInsetStart="0dp"
-            app:title="@string/register" />
+            android:layout_height="51dp"
+            android:hint="@string/email_hint" />
 
-    </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_user_password"
+        style="@style/Widget.Shrine.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_Large"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_start"
+        app:layout_constraintTop_toBottomOf="@id/til_user_email">
 
-
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_user_password"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="24dp"
-            android:paddingTop="50dp"
-            android:paddingEnd="24dp"
-            android:paddingBottom="0dp">
+            android:layout_height="wrap_content"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_user_email"
-                style="@style/Widget.Shrine.TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+    </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/email_hint" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_confirm_password"
+        style="@style/Widget.Shrine.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_vertical_end"
+        app:layout_constraintStart_toStartOf="@id/til_user_password"
+        app:layout_constraintTop_toBottomOf="@id/til_user_password">
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_confirm_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_user_password"
-                style="@style/Widget.Shrine.TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="@+id/til_user_email"
-                app:layout_constraintTop_toBottomOf="@id/til_user_email">
+    </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_user_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/password"
-                    android:inputType="textPassword" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/register_button"
+        style="@style/Widget.Shrine.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:text="@string/register"
+        app:layout_constraintEnd_toEndOf="@+id/til_confirm_password"
+        app:layout_constraintStart_toStartOf="@+id/til_confirm_password"
+        app:layout_constraintTop_toBottomOf="@+id/til_confirm_password" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_Large"
+        android:text="Or"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/til_confirm_password"
+        app:layout_constraintTop_toBottomOf="@+id/register_button" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_confirm_password"
-                style="@style/Widget.Shrine.TextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/til_user_password"
-                app:layout_constraintTop_toBottomOf="@id/til_user_password">
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/spacing_x_large"
+        android:layout_marginTop="@dimen/spacing_x_large"
+        android:layout_marginEnd="8dp"
+        android:background="@color/divider_color"
+        android:textAlignment="center"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/or"
+        app:layout_constraintStart_toStartOf="@+id/til_confirm_password"
+        app:layout_constraintTop_toBottomOf="@+id/register_button" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_confirm_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/confirm_password"
-                    android:inputType="textPassword" />
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/spacing_x_large"
+        android:layout_marginEnd="@dimen/spacing_x_large"
+        android:background="@color/divider_color"
+        app:layout_constraintEnd_toEndOf="@+id/til_confirm_password"
+        app:layout_constraintStart_toEndOf="@+id/or"
+        app:layout_constraintTop_toBottomOf="@+id/register_button" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/tv_sign_in_with_google"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/spacing_x_large"
+        android:text="@string/sign_in_with_google"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/guideline_vertical_second"
+        app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/register_button"
-                style="@style/Widget.Shrine.Button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/register"
-                app:layout_constraintEnd_toEndOf="@+id/til_confirm_password"
-                app:layout_constraintStart_toStartOf="@+id/til_confirm_password"
-                app:layout_constraintTop_toBottomOf="@+id/til_confirm_password" />
+    <ImageView
+        android:id="@+id/image_google_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_x_large"
+        android:contentDescription="@string/sign_in_with_google_icon"
+        android:visibility="visible"
+        app:layout_constraintEnd_toStartOf="@+id/tv_sign_in_with_google"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:srcCompat="@drawable/fui_ic_googleg_color_24dp" />
 
-            <TextView
-                android:id="@+id/or"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Or"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/til_confirm_password"
-                app:layout_constraintTop_toBottomOf="@+id/register_button" />
+    <ProgressBar
+        android:id="@+id/register_progress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/divider2"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="27dp"
-                android:layout_marginEnd="8dp"
-                android:background="@color/divider_color"
-                android:textAlignment="center"
-                android:visibility="visible"
-                app:layout_constraintEnd_toStartOf="@+id/or"
-                app:layout_constraintStart_toStartOf="@+id/til_confirm_password"
-                app:layout_constraintTop_toBottomOf="@+id/register_button" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.27" />
 
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="27dp"
-                android:layout_marginEnd="25dp"
-                android:background="@color/divider_color"
-                app:layout_constraintEnd_toEndOf="@+id/til_confirm_password"
-                app:layout_constraintStart_toEndOf="@+id/or"
-                app:layout_constraintTop_toBottomOf="@+id/register_button" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_horizontal_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.09" />
 
-            <TextView
-                android:id="@+id/tv_sign_in_with_google"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:text="@string/sign_in_with_google"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/guideline8"
-                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
 
-            <ImageView
-                android:id="@+id/image_google_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:contentDescription="@string/sign_in_with_google_icon"
-                android:visibility="visible"
-                app:layout_constraintEnd_toStartOf="@+id/tv_sign_in_with_google"
-                app:layout_constraintTop_toBottomOf="@+id/divider2"
-                app:srcCompat="@drawable/fui_ic_googleg_color_24dp" />
-
-            <ProgressBar
-                android:id="@+id/register_progress"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.27" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_vertical_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+

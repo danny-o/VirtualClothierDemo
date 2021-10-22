@@ -6,32 +6,19 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.digitalskies.virtualclothierdemo.Repository;
-import com.digitalskies.virtualclothierdemo.models.Product;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.digitalskies.virtualclothierdemo.data.Repository;
 
 public class MainActivityViewModel extends AndroidViewModel {
 
-    private final Repository repository;
-
+    Repository repository;
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
         repository = Repository.getRepository(application);
     }
-    public void getProducts(){
-        repository.getProducts();
-    }
-    public ArrayList<Product> getFavoriteProducts(){
-        return repository.getFavoriteProducts();
-    }
-    public void getFavAndCartProducts() {
-        repository.getFavAndCartProducts();
+
+    public LiveData<String> getUserProfileImage(){
+        return repository.userProfileImage();
     }
 
-    public LiveData<List<Product>> products(){
-        return repository.productList();
-    }
 
 }

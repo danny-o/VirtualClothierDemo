@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacing_small">0dp</dimen>
+    <dimen name="spacing_medium">4dp</dimen>
+    <dimen name="spacing_Large">8dp</dimen>
+    <dimen name="spacing_x_large">16dp</dimen>
+
+
+
+
+    <dimen name="product_image_size">200dp</dimen>
+
+    <dimen name="fav_button_background_size">30dp</dimen>
+
+    <dimen name="fav_button_size">20dp</dimen>
+
+    <dimen name="text_padding_sides">10dp</dimen>
+
+    <dimen name="text_padding_up_and_bottom">3dp</dimen>
+
+    <dimen name="clothe_size_textview_size">27dp</dimen>
+
+    <dimen name="semi_circle_drawables_height">70dp</dimen>
+
+    <dimen name="semi_circle_drawables_width">140dp</dimen>
+
+    <dimen name="logo_icon_size">73dp</dimen>
+
+
+</resources>

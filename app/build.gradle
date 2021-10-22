@@ -1,11 +1,13 @@
 apply plugin: 'com.android.application'
 
+apply plugin: "androidx.navigation.safeargs"
+
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.digitalskies.virtualclothierdemo"
-        minSdkVersion 21
-        targetSdkVersion 27
+        minSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -17,10 +19,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
+
     api 'com.google.android.material:material:1.1.0-alpha06'
+
+
+    implementation 'com.google.android.material:material:1.1.0-alpha08'
 
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -45,6 +55,25 @@ dependencies {
 
     //picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.github.jrvansuita:PickImage:+'
+
+    //navigation
+    implementation "androidx.navigation:navigation-fragment:2.3.5"
+    implementation "androidx.navigation:navigation-ui:2.3.5"
+
+    //country picker
+    implementation 'com.github.yesterselga:country-picker-android:2.0'
+
+
+    //ViewPager2
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
+    implementation 'com.android.support:palette-v7:30.0.0'
+
+
+
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:core:1.2.0'

@@ -5,12 +5,20 @@ import android.os.Parcelable;
 
 import com.google.firebase.firestore.Exclude;
 
+import java.util.List;
+
 public class Product implements Parcelable {
+
     private  String image;
     private String name;
+    private List<String> tags;
+    private List<String> images;
     private  String productCategory;
     private int price;
     private String productDescription;
+
+
+
     @Exclude
     private boolean isFavorite;
     @Exclude
@@ -22,16 +30,21 @@ public class Product implements Parcelable {
 
 
 
-    public Product(String name, String productCategory, int price,String productDescription){
+    public Product(String name, String productCategory, int price,String productDescription,List<String> images,List<String> tags){
         this.name=name;
         this.price=price;
         this.productCategory=productCategory;
         this.productDescription=productDescription;
+        this.images = images;
+        this.tags = tags;
     }
+
 
     protected Product(Parcel in) {
         image = in.readString();
         name = in.readString();
+        tags = in.createStringArrayList();
+        images = in.createStringArrayList();
         productCategory = in.readString();
         price = in.readInt();
         productDescription = in.readString();
@@ -101,6 +114,25 @@ public class Product implements Parcelable {
         isInCart = inCart;
     }
 
+
+
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -110,6 +142,8 @@ public class Product implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(image);
         dest.writeString(name);
+        dest.writeStringList(tags);
+        dest.writeStringList(images);
         dest.writeString(productCategory);
         dest.writeInt(price);
         dest.writeString(productDescription);

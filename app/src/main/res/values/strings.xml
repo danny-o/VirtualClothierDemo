@@ -54,12 +54,39 @@
     <string name="product_detail">Product Details</string>
     <string name="price_prefix">$</string>
     <string name="product_description">Product Description</string>
+    <string name="product_details">Hello, Im an experienced android developer with a
+        wide knowledge of android APIs and libraries. Im able to create beautiful UIs,
+        integrate APIs, connect the app to the backend, debug and test the app as well as add any necessary functionalities.</string>
     <string name="add_to_cart">Add To Cart</string>
     <string name="projects_search_hint">Search products...</string>
-    <string name="favorites">Favorites</string>
+
     <string name="sign_out">Sign Out</string>
     <string name="product_entry">Product Entry</string>
     <string name="not_registered">Not registered? register</string>
     <string name="checkout">Checkout</string>
+    <string name="product_fragment">ProductFragment</string>
+    <string name="fragment_checkout">FragmentCheckOut</string>
+    <string name="profile_fragment">ProfileFragment</string>
+
+    <string name="all">All</string>
+
+    <string name="trending">Trending</string>
+    <string name="favorites">Favorites</string>
+
+    <string name="men">Men</string>
+
+    <string name="women">Women</string>
+    <string name="content">With the idea of imparting programming        knowledge, Mr. Sandeep Jain, an IIT Roorkee alumnus started a        dream, GeeksforGeeks. Whether programming excites you or you feel        stifled, wondering how to prepare for interview questions or how to       ace data structures and algorithms, GeeksforGeeks is a one-stop solution.       With every tick of time, we are adding arrows in our quiver. From articles        on various computer science subjects to programming problems for practice,       from basic to premium courses, from technologies to entrance examinations,        we have been building ample content with superior quality. In a short span,        we have built a community of 1 Million+ Geeks around the world, 20,000+        Contributors and 500+ Campus Ambassadors in various colleges across the nation.       Our success stories include a lot of students who benefitted in their placements        and landed jobs at tech giants. Our vision is to build a gigantic network of        geeks and we are only a fraction of it yet.</string>
+    <string name="product_tags">Tags</string>
+
+    <string-array name="product_categories">
+
+        <item>All</item>
+        <item>Trending</item>
+        <item>Favorites</item>
+        <item>Men</item>
+        <item>Women</item>
+
+    </string-array>
 
 </resources>

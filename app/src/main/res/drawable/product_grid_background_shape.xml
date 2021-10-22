@@ -31,7 +31,7 @@
             android:pivotX="50%"
             android:pivotY="100%">
             <shape>
-                <solid android:color="@color/productGridBackgroundColor" />
+                <solid android:color="@color/app_theme_color" />
             </shape>
         </rotate>
     </item>
@@ -59,7 +59,7 @@
         android:left="29.5dp"
         android:top="3.5dp">
         <shape>
-            <solid android:color="@color/productGridBackgroundColor" />
+            <solid android:color="@color/app_theme_color" />
         </shape>
     </item>
 
@@ -68,7 +68,7 @@
         android:height="1000dp"
         android:top="33dp">
         <shape>
-            <solid android:color="@color/productGridBackgroundColor" />
+            <solid android:color="@color/app_theme_color" />
         </shape>
     </item>
 

@@ -4,7 +4,7 @@
     <style name="Theme.Shrine" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/app_theme_color</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
@@ -23,7 +23,8 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:paddingStart">20dp</item>
         <item name="android:paddingEnd">12dp</item>
-        <item name="boxStrokeColor">@color/textInputOutlineColor</item>
+
+        <item name="boxStrokeColor">@color/app_theme_color_dark</item>
     </style>
 
     <style name="TextAppearance.Shrine.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
@@ -32,7 +33,7 @@
 
     <style name="Widget.Shrine.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="backgroundTint">?attr/colorPrimaryDark</item>
+        <item name="backgroundTint">?attr/colorAccent</item>
         <item name="android:stateListAnimator" tools:ignore="NewApi">
             @animator/shr_next_button_state_list_anim
         </item>
@@ -77,5 +78,14 @@
         <item name="queryBackground">@android:color/white</item>
         <item name="android:queryHint">@string/projects_search_hint</item>
     </style>
-
+    <style name="Collapsed.TextAppearance" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="Expanded.TextAppearance" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:visible">false</item>
+        <item name="android:visibility">gone</item>
+    </style>
 </resources>

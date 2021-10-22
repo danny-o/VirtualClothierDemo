@@ -1,5 +1,9 @@
 package com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments;
 
+
+
+
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,16 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.MainActivity;
 import com.digitalskies.virtualclothierdemo.ui.mainactivity.SignInUtil;
-import com.digitalskies.virtualclothierdemo.ui.mainactivity.NavigationHost;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -38,14 +44,14 @@ public class LoginFragment extends Fragment {
     private TextInputLayout emailTextInput,passwordTextInput;
     private TextView signInWithGoogleBtn,register;
     private TextInputEditText emailEditText;
-    private ProgressBar signInProgress;
+
     public static final String USER_IS_ADMIN = "com.digitalskies.virtualclothierdemo.LoginFragment";
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.login_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         signInUtil = SignInUtil.getSignInUtil();
 
@@ -56,16 +62,26 @@ public class LoginFragment extends Fragment {
         signInWithGoogleBtn = view.findViewById(R.id.sign_in_with_google);
         register=view.findViewById(R.id.register_here);
         signInButton = view.findViewById(R.id.button_sign_in);
-        signInProgress=view.findViewById(R.id.sign_in_progress);
+
 
         setUpSignInButton();
         setUpSignInWithGoogleBtn();
         setUpRegisterTextView();
         setUpProgressBarVisibility(ProgressBar.INVISIBLE);
 
+        setStatusBarColor();
+
+
+
+        hideBottomNavigation();
+
+
+
         return view;
 
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -75,14 +91,24 @@ public class LoginFragment extends Fragment {
             try {
                 Task<GoogleSignInAccount> task= GoogleSignIn.getSignedInAccountFromIntent(data);
                 GoogleSignInAccount account=task.getResult(ApiException.class);
-                signInUtil.firebaseAuthWithGoogle(account.getIdToken(),account.getDisplayName());
-                Toast.makeText(getActivity(),"sign in with google succeeded",Toast.LENGTH_SHORT).show();
+
+                signInUtil.firebaseAuthWithGoogle(account);
+
+
+
             } catch (ApiException e) {
                 e.printStackTrace();
                 Log.e(getClass().getSimpleName(),"GoogleSignIn failed");
             }
 
         }
+    }
+    private void setStatusBarColor() {
+        ((MainActivity)requireActivity()).setStatusBarColor(getActivity().getColor(R.color.app_theme_color_dark));
+    }
+
+    private void hideBottomNavigation() {
+        ((MainActivity)requireActivity()).hideBottomNavigation();
     }
 
     private void setUpSignInButton() {
@@ -99,7 +125,7 @@ public class LoginFragment extends Fragment {
                 else {
                     emailTextInput.setError(null);
                     passwordTextInput.setError(null);
-                    setUpProgressBarVisibility(ProgressBar.VISIBLE);
+                    ((MainActivity)getActivity()).showLoading();
                     signInUtil.signInWithEmailAndPassword(emailEditText.getText().toString(),passwordEditText.getText().toString());
                 }
 
@@ -107,12 +133,17 @@ public class LoginFragment extends Fragment {
         });
     }
     private void setUpSignInWithGoogleBtn() {
-        signInWithGoogleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        signInWithGoogleBtn.setOnClickListener(v -> {
 
-                signInUtil.signInWithGoogle();
-            }
+            GoogleSignInOptions gSignInOptions=new GoogleSignInOptions
+                    .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(requireActivity().getString(R.string.web_client_id))
+                    .requestEmail()
+                    .build();
+            GoogleSignInClient signInClient= GoogleSignIn.getClient(requireActivity(), gSignInOptions);
+
+            Intent signInIntent=signInClient.getSignInIntent();
+            startActivityForResult(signInIntent,RC_SIGN_IN);
         });
 
     }
@@ -120,11 +151,13 @@ public class LoginFragment extends Fragment {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((NavigationHost)getActivity()).navigateTo(new RegisterFragment(),true);
+
+              NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.navigate_to_register_fragment);
+
             }
         });
     }
     public void setUpProgressBarVisibility(int visibility) {
-        signInProgress.setVisibility(visibility);
+        //signInProgress.setVisibility(visibility);
     }
 }

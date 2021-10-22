@@ -8,6 +8,14 @@ public class User {
 
     private Boolean isAdmin;
 
+    private String deliveryAddress;
+
+
+
+    private String image;
+
+    private String email;
+
     private List<String> favoriteProducts;
 
     private List<String> productsInCart;
@@ -27,6 +35,14 @@ public class User {
     public Boolean getAdmin() {
         return isAdmin;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
     public List<String> getFavoriteProducts() {
         return favoriteProducts;
     }
@@ -43,4 +59,19 @@ public class User {
     }
 
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
 }

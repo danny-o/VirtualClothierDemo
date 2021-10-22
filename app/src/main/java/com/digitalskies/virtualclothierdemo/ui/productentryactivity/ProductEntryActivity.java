@@ -19,30 +19,69 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.digitalskies.virtualclothierdemo.Repository;
+import com.digitalskies.virtualclothierdemo.data.Repository;
+import com.digitalskies.virtualclothierdemo.models.ImageUploadResponse;
+import com.digitalskies.virtualclothierdemo.models.Product;
 import com.google.codelabs.mdc.java.virtualclothierdemo.R;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class ProductEntryActivity extends AppCompatActivity implements ToastMessage {
 
     private static final int UPLOAD_REQUEST =2 ;
     private static final int REQUEST_PERMISSIONS =1 ;
-    private EditText productName,productCategory,productPrice,productDescription;
+    private EditText productName,productCategory,productPrice,productDescription,productTags;
     private ImageView productImage;
     private Button saveButton;
     private Repository repository;
     private Uri imageUri;
     private ProgressBar uploadProgress;
     private ProductEntryViewModel viewModel;
+    private List<Uri> imageUris=new ArrayList<>();
+    private List<String> downLoadUrls=new ArrayList<>();
+
+    private int uploadedImages=0;
 
     Observer<Integer> observer=new Observer<Integer>() {
 
         @Override
         public void onChanged(Integer uploadStatus) {
-            setResult(uploadStatus);
+
             showToast(uploadStatus);
             hideProgressBar();
-            finish();
+
         }
+    };
+    Observer<ImageUploadResponse> imageUploadObserver= imageUploadResponse -> {
+
+        if(imageUploadResponse.isImageUploaded()){
+            uploadedImages++;
+            downLoadUrls.add(imageUploadResponse.getDownloadUrl());
+            if(uploadedImages<imageUris.size()){
+
+
+                viewModel.uploadImage(imageUris.get(uploadedImages),productCategory.getText().toString(),productName.getText().toString(),uploadedImages);
+            }
+            if(uploadedImages==imageUris.size()){
+
+                List<String> tags=Arrays.asList(productTags.getText().toString().replace(" ","").split(","));
+
+               tags.forEach(s -> s.replace(",",""));
+
+
+                viewModel.createProduct(productName.getText().toString(),
+                        productCategory.getText().toString(),Integer.parseInt(productPrice.getText().toString()),
+                        productDescription.getText().toString(),downLoadUrls,tags);
+            }
+        }
+        else{
+            showToast(1);
+        }
+
     };
 
     @Override
@@ -55,6 +94,7 @@ public class ProductEntryActivity extends AppCompatActivity implements ToastMess
 
         productName=findViewById(R.id.et_product_name);
         productPrice=findViewById(R.id.et_product_price);
+        productTags=findViewById(R.id.et_product_tags);
         productCategory=findViewById(R.id.et_product_category);
         productDescription=findViewById(R.id.et_product_description);
         saveButton=findViewById(R.id.save_button);
@@ -72,7 +112,7 @@ public class ProductEntryActivity extends AppCompatActivity implements ToastMess
                             REQUEST_PERMISSIONS);
                 }
                 Intent intent=new Intent(Intent.ACTION_GET_CONTENT)
-                        .setType("image/jpeg")
+                        .setType("image/*")
                         .putExtra(Intent.EXTRA_LOCAL_ONLY,true);
                 ProductEntryActivity.this.startActivityForResult(Intent.createChooser(intent,"Select picture"),UPLOAD_REQUEST);
             }
@@ -82,22 +122,27 @@ public class ProductEntryActivity extends AppCompatActivity implements ToastMess
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==UPLOAD_REQUEST&&resultCode==RESULT_OK){
+
             imageUri = data.getData();
-            productImage.setImageURI(imageUri);
+            imageUris.add(data.getData());
+
+            if(imageUris.size()==1){
+                productImage.setImageURI(imageUri);
+            }
+
         }
 
     }
 
    public void createProduct(View view){
 
-        if(imageUri!=null){
+        if(imageUris.size()!=0){
             showProgressBar();
-            viewModel.createProduct(
-                    productName.getText().toString(),
-                    productCategory.getText().toString(),
-                    Integer.parseInt(productPrice.getText().toString()),
-                    productDescription.getText().toString(),
-                    imageUri);
+
+            viewModel.getImageUploadResponse().observe(this,imageUploadObserver);
+
+            viewModel.uploadImage(imageUris.get(0),productCategory.getText().toString(),productName.getText().toString(),0);
+
 
         }
         else{

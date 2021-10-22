@@ -12,7 +12,7 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
-import com.digitalskies.virtualclothierdemo.ui.checkoutactivity.CheckOutActivity;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.checkoutfragment.CheckOutFragment;
 import com.google.codelabs.mdc.java.virtualclothierdemo.R;
 
 public class NotificationCreator {
@@ -52,7 +52,7 @@ public class NotificationCreator {
                 .setContentIntent(
                         PendingIntent.getActivity(context,
                                 0,
-                                new Intent(context, CheckOutActivity.class),
+                                new Intent(context, CheckOutFragment.class),
                                 PendingIntent.FLAG_UPDATE_CURRENT)
                 )
                 .setAutoCancel(true);

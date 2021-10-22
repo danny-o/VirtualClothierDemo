@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#E0E0E0</color>
+    <color name="colorPrimary">@color/app_theme_color</color>
     <color name="colorPrimaryDark">#FBB8AC</color>
-    <color name="colorAccent">#FEDBD0</color>
+    <color name="colorAccent">#FBB8AC</color>
     <color name="textColorPrimary">#442C2E</color>
     <color name="toolbarIconColor">@color/textColorPrimary</color>
     <color name="loginPageBackgroundColor">#FFFFFF</color>
-    <color name="productGridBackgroundColor">#FFFBFA</color>
-    <color name="textInputOutlineColor">#FBB8AC</color>
+    <color name="app_theme_color">#F8F0EE</color>
+
+    <color name="app_theme_color_dark">#FBB8AC</color>
+    <color name="app_theme_color_light_transparent">#80FDEFEC</color>
+
+    <color name="app_theme_color_dark_transparent">#80FAA295</color>
     <color name="White">#fff</color>
+    <color name="dark_gray">#7E7A7A</color>
+    <color name="lightgray">#DAD6D6</color>
     <color name="divider_color">#6A6262</color>
+    <color name="pink_reddish">#F35D42</color>
+    <color name="light_black_transparent">#99E0DDDD</color>
+    <color name="light_pink">#F3C6BA</color>
+
+    <color name="dark_pink">#F69D8D</color>
+    <color name="purple">#A476F6</color>
+    <color name="black">#000000</color>
+    <color name="color_brown">#BF6F32</color>
+    <color name="faded_pink">#DFD1CF</color>
+
+    <color name="pinkish_white">#FCF9F9</color>
 </resources>

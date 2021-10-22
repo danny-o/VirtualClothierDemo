@@ -12,8 +12,9 @@ import androidx.fragment.app.Fragment;
 
 import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.RegisterFragment;
 import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.LoginFragment;
-import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.ProductFragment;
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.productsfragment.ProductFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +23,7 @@ import com.google.codelabs.mdc.java.virtualclothierdemo.R;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,40 +37,33 @@ public class SignInUtil{
     public static final int RC_SIGN_IN = 123;
     private static FirebaseAuth.AuthStateListener mAuthStateListener;
     private static FirebaseAuth firebaseAuth;
-    private ProductFragment productFragment;
-    private LoginFragment loginFragment;
-    private RegisterFragment registerFragment;
+
     private FirebaseFirestore firebaseFirestore;
     private static Boolean isAdmin=false;
     private static final  String TAG="Sign in";
-    private Activity activity;
+    private MainActivity activity;
     private static SignInUtil signInUtil;
     private Boolean isANewUser=true;
     private final SharedPreferences sharedPreferences;
 
-    private SignInUtil(Activity activity){
+    private SignInUtil(MainActivity activity){
 
         this.activity=activity;
-        this.loginFragment=new LoginFragment();
-        this.productFragment=new ProductFragment();
+        //this.loginFragment=new LoginFragment();
+        //this.productFragment=new ProductFragment();
         sharedPreferences = activity.getSharedPreferences("My_PREFERENCES",Activity.MODE_PRIVATE);
         setUpFireBaseFireStore();
         setUpFireBaseAuth();
         setUpAuthListener();
     }
-    public static void initiateSignInUtil(Activity activity){
+    public static void initiateSignInUtil(MainActivity activity){
        signInUtil=new SignInUtil(activity);
     }
     public static SignInUtil getSignInUtil(){
         return  signInUtil;
     }
 
-    public Fragment getLoginFragment(){
-        return loginFragment;
-    }
-    public Fragment getProductFragment(){
-        return productFragment;
-    }
+
 
     private void setUpFireBaseAuth() {
         if(firebaseAuth==null){
@@ -85,8 +80,13 @@ public class SignInUtil{
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()==null){
-                    ((NavigationHost)activity).navigateTo(loginFragment,false);
+                   activity.onUserLoggedOut();
 
+
+
+                }
+                else {
+                    activity.onUserLoggedIn();
                 }
 
                    }
@@ -109,8 +109,7 @@ public class SignInUtil{
     }
 
     public void createNewUser(Fragment fragment,final String email, String password){
-        registerFragment=(RegisterFragment)fragment;
-       registerFragment.setUpProgressBar(ProgressBar.VISIBLE);
+       activity.showLoading();
         firebaseAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -123,20 +122,21 @@ public class SignInUtil{
                             user.setFavoriteProducts(favProducts);
                             user.setProductsInCart(productsInCart);
                             user.setAdmin(false);
+                            user.setEmail(email);
                             firebaseFirestore.collection("users").document(firebaseAuth.getCurrentUser().getUid())
                                     .set(user)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()) {
-                                                registerFragment.setUpProgressBar(ProgressBar.INVISIBLE);
+                                                activity.hideLoading();
                                                 Toast.makeText(activity, "registered successfully", Toast.LENGTH_SHORT).show();
                                                 isANewUser = true;
                                                 firebaseAuth.signOut();
                                             }
                                             else{
                                                 Toast.makeText(activity,"something went wrong",Toast.LENGTH_SHORT).show();
-                                                registerFragment.setUpProgressBar(ProgressBar.INVISIBLE);
+                                                activity.hideLoading();
 
 
                                             }
@@ -144,7 +144,7 @@ public class SignInUtil{
                                     });
                         }
                         else{
-                          registerFragment.setUpProgressBar(ProgressBar.INVISIBLE);
+                          activity.hideLoading();
                             Toast.makeText(activity,"registration failed",Toast.LENGTH_SHORT).show();
                         }
 
@@ -157,9 +157,14 @@ public class SignInUtil{
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        activity.hideLoading();
                         if(task.isSuccessful()){
                             isANewUser=true;
                             checkIfAdmin();
+
+                            sharedPreferences.edit().putString("USER_EMAIL",email).apply();
+
+                            sharedPreferences.edit().putString("USER_NAME",firebaseAuth.getCurrentUser().getDisplayName()).apply();
 
                         }
                         else{
@@ -177,11 +182,12 @@ public class SignInUtil{
         GoogleSignInClient signInClient= GoogleSignIn.getClient(activity, gSignInOptions);
 
         Intent signInIntent=signInClient.getSignInIntent();
-        loginFragment.startActivityForResult(signInIntent,RC_SIGN_IN);
+        //loginFragment.startActivityForResult(signInIntent,RC_SIGN_IN);
     }
 
-    public  void firebaseAuthWithGoogle(String idToken,final String name){
-        final AuthCredential credential=GoogleAuthProvider.getCredential(idToken,null) ;
+    public  void firebaseAuthWithGoogle(GoogleSignInAccount account){
+        activity.showLoading();
+        final AuthCredential credential=GoogleAuthProvider.getCredential(account.getIdToken(),null) ;
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -192,7 +198,22 @@ public class SignInUtil{
                                 List<String >favProductList = new ArrayList<>();
                                 List<String >productsInCart = new ArrayList<>();
                                 User user = new User();
-                                user.setName(name);
+                                user.setName(account.getDisplayName());
+
+                                user.setEmail(account.getEmail());
+
+                                if(account.getPhotoUrl()!=null){
+                                    user.setImage(account.getPhotoUrl().toString());
+
+
+
+                                }
+
+
+
+
+
+
                                 user.setAdmin(true);
                                 user.setFavoriteProducts(favProductList);
                                 user.setProductsInCart(productsInCart);
@@ -237,7 +258,7 @@ public class SignInUtil{
                             isAdmin=user.getAdmin();
                             setProductsInCart(user);
 
-                            loginFragment.setUpProgressBarVisibility(ProgressBar.INVISIBLE);
+                            activity.hideLoading();
 
                             SharedPreferences.Editor editor=sharedPreferences.edit();
                             editor.putBoolean("isAdmin",isAdmin);
@@ -245,7 +266,7 @@ public class SignInUtil{
 
                             editor.apply();
 
-                            ((NavigationHost)activity).navigateTo(productFragment,false);
+                            activity.onUserLoggedIn();
 
                         }
                         else {
@@ -264,6 +285,7 @@ public class SignInUtil{
        SharedPreferences.Editor editor=sharedPreferences.edit();
        editor.putInt("PRODUCTS_IN_CART",user.getProductsInCart().size());
        editor.apply();
+       activity.setUpCartCount(user.getProductsInCart().size());
 
     }
 
@@ -275,6 +297,10 @@ public class SignInUtil{
     }
     public boolean getIfIsANewUser(){
         return  isANewUser;
+    }
+
+    public FirebaseUser getUser(){
+        return  firebaseAuth.getCurrentUser();
     }
     public void setIfIsANewUser(boolean isANewUser){
         this.isANewUser=isANewUser;

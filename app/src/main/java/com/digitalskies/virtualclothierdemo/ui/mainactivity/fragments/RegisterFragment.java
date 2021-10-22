@@ -18,9 +18,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.digitalskies.virtualclothierdemo.ui.mainactivity.MainActivity;
 import com.digitalskies.virtualclothierdemo.ui.mainactivity.SignInUtil;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -65,11 +68,22 @@ public class RegisterFragment extends Fragment {
 
         setUPSignInWithGoogle();
 
+        setStatusBarColor();
+
+        hideBottomNavigation();
+
+
+
+
+
+
+
         signInUtil=SignInUtil.getSignInUtil();
 
         return view;
 
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -78,7 +92,7 @@ public class RegisterFragment extends Fragment {
             try {
                 Task<GoogleSignInAccount> task= GoogleSignIn.getSignedInAccountFromIntent(data);
                 GoogleSignInAccount account=task.getResult(ApiException.class);
-                signInUtil.firebaseAuthWithGoogle(account.getIdToken(),account.getDisplayName());
+                signInUtil.firebaseAuthWithGoogle(account);
                 Toast.makeText(getActivity(),"sign in with google succeeded",Toast.LENGTH_SHORT).show();
             } catch (ApiException e) {
                 e.printStackTrace();
@@ -86,6 +100,13 @@ public class RegisterFragment extends Fragment {
             }
 
         }
+    }
+
+    private void setStatusBarColor() {
+        ((MainActivity)requireActivity()).setStatusBarColor(getActivity().getColor(R.color.app_theme_color_dark));
+    }
+    private void hideBottomNavigation() {
+        ((MainActivity)requireActivity()).hideBottomNavigation();
     }
 
     public void setUpRegisterButton(){
@@ -129,13 +150,29 @@ public class RegisterFragment extends Fragment {
         googleIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInUtil.signInWithGoogle();
+                GoogleSignInOptions gSignInOptions=new GoogleSignInOptions
+                        .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(requireActivity().getString(R.string.web_client_id))
+                        .requestEmail()
+                        .build();
+                GoogleSignInClient signInClient= GoogleSignIn.getClient(requireActivity(), gSignInOptions);
+
+                Intent signInIntent=signInClient.getSignInIntent();
+                startActivityForResult(signInIntent,RC_SIGN_IN);
             }
         });
         signInWithGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInUtil.signInWithGoogle();
+                GoogleSignInOptions gSignInOptions=new GoogleSignInOptions
+                        .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(requireActivity().getString(R.string.web_client_id))
+                        .requestEmail()
+                        .build();
+                GoogleSignInClient signInClient= GoogleSignIn.getClient(requireActivity(), gSignInOptions);
+
+                Intent signInIntent=signInClient.getSignInIntent();
+                startActivityForResult(signInIntent,RC_SIGN_IN);
             }
         });
     }

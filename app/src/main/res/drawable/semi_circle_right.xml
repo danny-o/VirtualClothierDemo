@@ -1,0 +1,11 @@
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@android:color/black"/>
+    <size
+        android:width="@dimen/semi_circle_drawables_height"
+        android:height="@dimen/semi_circle_drawables_width"/>
+    <corners
+        android:bottomRightRadius="@dimen/semi_circle_drawables_height"
+        android:topRightRadius="@dimen/semi_circle_drawables_height"/>
+</shape>

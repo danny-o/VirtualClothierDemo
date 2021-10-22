@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_logged_out"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+
+        <action android:id="@+id/navigate_to_register_fragment"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/fui_slide_in_right"
+            app:exitAnim="@anim/fui_slide_out_left">
+
+        </action>
+
+        <action
+            android:id="@+id/action_loginFragment_to_productFragment"
+            app:destination="@id/productFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.RegisterFragment"
+        android:label="RegisterFragment"
+        tools:layout="@layout/register_fragment"/>
+
+
+
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.productsfragment.ProductFragment"
+        tools:layout="@layout/product_fragment"
+        android:label="@string/product_fragment"
+        app:launchSingleTop="true">
+        <action
+            android:id="@+id/action_productFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment"
+            app:popUpToInclusive="false"
+            app:launchSingleTop="true"/>
+
+    </fragment>
+    <fragment
+        android:id="@+id/checkOutFragment"
+        android:name="com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.checkoutfragment.CheckOutFragment"
+        android:label="@string/fragment_checkout"
+        tools:layout="@layout/fragment_check_out" >
+        <action
+            android:id="@+id/action_checkOutFragment_to_deliveryDetailsFragment"
+            app:destination="@id/deliveryDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.productdetailsfragment.ProductDetailsFragment"
+        android:label="activity_product_details"
+        tools:layout="@layout/activity_product_details">
+
+        <argument
+            android:name="Product"
+            app:argType="com.digitalskies.virtualclothierdemo.models.Product" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.profilefragment.ProfileFragment"
+        android:label="@string/profile_fragment"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_productFragment"
+        app:destination="@id/productFragment"
+        app:popUpTo="@id/loginFragment"
+        app:popUpToInclusive="true"/>
+    <fragment
+        android:id="@+id/deliveryDetailsFragment"
+        android:name="com.digitalskies.virtualclothierdemo.ui.mainactivity.fragments.deliverydetailsfragment.DeliveryDetailsFragment"
+        android:label="DeliveryDetailsFragment"
+        tools:layout="@layout/fragment_delivery_details"/>
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment"
+        app:popUpTo="@id/nav_graph_logged_out"
+        app:popUpToInclusive="true" />
+</navigation>
